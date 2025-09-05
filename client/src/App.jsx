@@ -1,7 +1,11 @@
-import { useState } from "react";
+import LandingPage from "../src/pages/LandingPage";
 
 function App() {
-  return <div></div>;
+  return (
+    <div>
+      <LandingPage></LandingPage>
+    </div>
+  );
 }
 
 export default App;
