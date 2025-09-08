@@ -7,8 +7,11 @@ import Heart from "../assets/Recipes Liked.png";
 import Sharing from "../assets/sharing.png";
 import Clock from "../assets/clock.png";
 import ServingIcon from "../assets/Serving Icon.png";
+import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
+  const navigate = useNavigate();
+
   return (
     <div>
       <nav>
@@ -19,7 +22,12 @@ const LandingPage = () => {
 
         <div className="nav-buttons">
           <button className="signIn-BTN">Sign In</button>
-          <button className="getStarted-BTN">Get Started</button>
+          <button
+            className="getStarted-BTN"
+            onClick={() => navigate("/register")}
+          >
+            Get Started
+          </button>
         </div>
       </nav>
 
@@ -202,11 +210,6 @@ const LandingPage = () => {
       </div>
 
       <footer>
-        <div className="logo-name">
-          <img src={Logo} alt="Logo" className="logo" />
-          <p className="website-name">Let'em Cook</p>
-        </div>
-
         <div className="footer-links">
           <p>© 2025 Let'em Cook. All rights reserved.</p>
           <p>Privacy</p>

@@ -1,0 +1,167 @@
+@import url("https://fonts.googleapis.com/css2?family=Playball&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Reem+Kufi:wght@400..700&display=swap");
+
+* {
+  font-family: Poppins;
+  margin: 0;
+}
+
+.registration-page {
+  background-color: #ffefea;
+  display: flex;
+  min-height: 90vh;
+  width: 100vw;
+  align-items: center;
+  justify-content: center;
+}
+
+.registration-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  padding: 50px 100px;
+  border-radius: 15px;
+  gap: 25px;
+  box-shadow: 4px 8px 16px 0px rgba(0, 0, 0, 0.15);
+}
+
+/* LEFT SECTION */
+
+.left-section {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.poster {
+  width: 350px;
+  margin-bottom: 20px;
+}
+
+.sub-tagline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 35px;
+  font-size: 1.3rem;
+}
+
+.tagline {
+  font-family: Playball;
+  font-size: 3.5rem;
+  font-weight: 500;
+}
+
+hr {
+  width: 150px;
+  border: 1px solid #f97450;
+}
+
+.taglines-wrapper {
+  width: 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* LOGO & WEBSITE NAME */
+
+.logo-name-registration {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+}
+
+.logo2 {
+  width: 35px;
+}
+
+.website-name2 {
+  font-weight: bold;
+  font-size: 25px;
+  background: linear-gradient(90deg, #f97450, #f8d492);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+/* RIGHT SECTION */
+
+.partition {
+  width: 1px;
+  height: 650px;
+  border: none;
+  border-left: 2px solid #bebebe;
+  margin: 0 40px;
+}
+
+.title h1 {
+  font-size: 3rem;
+  font-weight: 600;
+}
+
+.title p {
+  color: #a8a8a8;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+form div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+input {
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #cccccc;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+label {
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.sign-up-button {
+  background-color: #f97450;
+  border-radius: 8px;
+  border: none;
+  color: white;
+  font-size: 1.1rem;
+  padding: 10px;
+  font-weight: 500;
+  margin-top: 20px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.sign-up-button:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.link-to-login {
+  text-align: center;
+  font-size: 14px;
+  margin-top: 15px;
+}
+
+.link-to-login span {
+  color: #f97450;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.link-to-login span:hover {
+  text-decoration: underline;
+}
