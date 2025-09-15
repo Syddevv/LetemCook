@@ -11,9 +11,23 @@ nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 100;
   background-color: white;
+  transition: background-color 0.3s, box-shadow 0.3s;
+  box-shadow: none;
   padding: 25px 50px;
   border-bottom: 1px solid #cfcfcf;
+}
+
+/* Add a class for the transparent nav */
+nav.transparent {
+  background-color: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+  backdrop-filter: blur(8px);
 }
 
 .logo-name {
@@ -40,6 +54,7 @@ nav {
 .nav-buttons {
   display: flex;
   gap: 15px;
+  margin-right: 100px;
 }
 
 .signIn-BTN {
@@ -91,6 +106,7 @@ nav {
   justify-content: space-around;
   padding: 70px 200px;
   flex-wrap: wrap;
+  padding-top: 120px;
 }
 
 .hero-poster {

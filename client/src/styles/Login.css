@@ -8,7 +8,7 @@
 .login-page {
   background-color: #ffefea;
   display: flex;
-  min-height: 90vh;
+  min-height: 100vh;
   width: 100vw;
   align-items: center;
   justify-content: center;
@@ -23,6 +23,7 @@
   border-radius: 15px;
   gap: 25px;
   box-shadow: 4px 8px 16px 0px rgba(0, 0, 0, 0.15);
+  margin-top: 4%;
 }
 
 .sign-in-button {

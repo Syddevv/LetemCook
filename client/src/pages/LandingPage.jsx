@@ -1,3 +1,4 @@
+import React, { useEffect, useRef } from "react";
 import Logo from "../assets/Logo.png";
 import "../styles/LandingPage.css";
 import Pasta from "../assets/pasta.jpg";
@@ -11,10 +12,23 @@ import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const navRef = useRef(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 30) {
+        navRef.current.classList.add("transparent");
+      } else {
+        navRef.current.classList.remove("transparent");
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <div>
-      <nav>
+      <nav ref={navRef}>
         <div className="logo-name">
           <img src={Logo} alt="Logo" className="logo" />
           <p className="website-name">Let'em Cook</p>
