@@ -20,7 +20,9 @@ const RegistrationPage = () => {
         </div>
 
         <div className="nav-buttons">
-          <button className="signIn-BTN">Sign In</button>
+          <button className="signIn-BTN" onClick={() => navigate("/login")}>
+            Sign In
+          </button>
           <button
             className="getStarted-BTN"
             onClick={() => navigate("/register")}
