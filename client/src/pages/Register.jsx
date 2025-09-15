@@ -1,11 +1,10 @@
 import "../styles/Register.css";
 import Logo from "../assets/Logo.png";
 import Poster from "../assets/Chef-pana.png";
-import { Link, useNavigate } from "react-router-dom";
+import NavBar from "../components/NavBar";
+import { Link } from "react-router-dom";
 
 const RegistrationPage = () => {
-  const navigate = useNavigate();
-
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle form submission logic here
@@ -13,24 +12,7 @@ const RegistrationPage = () => {
 
   return (
     <div>
-      <nav>
-        <div className="logo-name" onClick={() => navigate("/")}>
-          <img src={Logo} alt="Logo" className="logo" />
-          <p className="website-name">Let'em Cook</p>
-        </div>
-
-        <div className="nav-buttons">
-          <button className="signIn-BTN" onClick={() => navigate("/login")}>
-            Sign In
-          </button>
-          <button
-            className="getStarted-BTN"
-            onClick={() => navigate("/register")}
-          >
-            Get Started
-          </button>
-        </div>
-      </nav>
+      <NavBar />
 
       <div className="registration-page">
         <div className="registration-wrapper">

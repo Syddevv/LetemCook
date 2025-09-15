@@ -1,5 +1,3 @@
-import React, { useEffect, useRef } from "react";
-import Logo from "../assets/Logo.png";
 import "../styles/LandingPage.css";
 import Pasta from "../assets/pasta.jpg";
 import Arrow from "../assets/white arrow.png";
@@ -8,45 +6,12 @@ import Heart from "../assets/Recipes Liked.png";
 import Sharing from "../assets/sharing.png";
 import Clock from "../assets/clock.png";
 import ServingIcon from "../assets/Serving Icon.png";
-import { useNavigate } from "react-router-dom";
+import NavBar from "../components/NavBar";
 
 const LandingPage = () => {
-  const navigate = useNavigate();
-  const navRef = useRef(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 30) {
-        navRef.current.classList.add("transparent");
-      } else {
-        navRef.current.classList.remove("transparent");
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
     <div>
-      <nav ref={navRef}>
-        <div className="logo-name">
-          <img src={Logo} alt="Logo" className="logo" />
-          <p className="website-name">Let'em Cook</p>
-        </div>
-
-        <div className="nav-buttons">
-          <button className="signIn-BTN" onClick={() => navigate("/login")}>
-            Sign In
-          </button>
-          <button
-            className="getStarted-BTN"
-            onClick={() => navigate("/register")}
-          >
-            Get Started
-          </button>
-        </div>
-      </nav>
-
+      <NavBar />
       <div className="hero">
         <div className="right-hero-section">
           <h1>Share Your</h1>
