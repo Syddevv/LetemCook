@@ -1,0 +1,137 @@
+.sidebar-wrapper {
+  background-color: #fff8f6;
+  height: 100vh;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-right: 1px solid #e5e5e5;
+  padding-top: 40px;
+  padding-left: 10px;
+  padding-right: 10px;
+  transition: width 0.3s;
+  position: relative;
+}
+
+.sidebar-wrapper.collapsed {
+  width: 70px;
+  align-items: flex-start;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.collapse-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #ffe2d9;
+  border: none;
+  border-radius: 6px;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+}
+
+.collapse-btn img {
+  width: 20px;
+}
+
+.sidebar-wrapper.collapsed .profile-wrapper {
+  display: none;
+}
+
+.profile-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.profile-pic {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 70px;
+  margin-bottom: 15px;
+}
+
+.profile-username {
+  font-weight: bold;
+  font-size: 22px;
+  margin-bottom: 5px;
+  color: #222;
+}
+
+.profile-bio {
+  font-size: 15px;
+  color: #515151;
+  margin-bottom: 10px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.navigations {
+  width: 100%;
+  padding-left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  font-weight: 500;
+  padding-right: 16px;
+  padding-left: 16px;
+}
+
+.sidebar-wrapper.collapsed .navigations {
+  padding-left: 0;
+  padding-right: 0;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.navigations li {
+  list-style-type: none;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 16px;
+  color: #222;
+  padding: 8px 28px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.sidebar-wrapper.collapsed .navigations li {
+  justify-content: center;
+  padding: 8px 0;
+  gap: 0;
+}
+
+.navigations li.active {
+  color: #f97450;
+  background: #fff0ea;
+  font-weight: 500;
+}
+
+.navigations img {
+  width: 22px;
+}
+
+.navigations li.logout {
+  margin-top: 40px;
+  color: #515151;
+  font-size: 16px;
+}
+
+.navigations li:hover {
+  background: #ffe2d9;
+  color: #f97450;
+  box-shadow: 0 2px 8px rgba(249, 116, 80, 0.08);
+  transform: translateY(-1px) scale(1);
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
