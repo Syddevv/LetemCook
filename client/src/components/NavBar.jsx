@@ -23,7 +23,9 @@ const NavBar = () => {
       <nav ref={navRef}>
         <div className="logo-name">
           <img src={Logo} alt="Logo" className="logo" />
-          <p className="website-name">Let'em Cook</p>
+          <p className="website-name" onClick={() => navigate("/")}>
+            Let'em Cook
+          </p>
         </div>
 
         <div className="nav-buttons">
