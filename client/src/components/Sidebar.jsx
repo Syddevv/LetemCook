@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Profilepic from "../assets/syd-ig-profile.jpg";
 import DiscoverIcon from "../assets/Discover Recipes.png";
 import CommunityIcon from "../assets/Community Recipes.png";
@@ -9,12 +9,9 @@ import SettingsIcon from "../assets/Settings.png";
 import LogoutIcon from "../assets/logout.png";
 import CollapseOpen from "../assets/open-sidebar.png";
 import CollapseClose from "../assets/close-sidebar.png";
-
 import "../styles/Sidebar.css";
 
-const Sidebar = () => {
-  const [collapsed, setCollapsed] = useState(false);
-
+const Sidebar = ({ collapsed, setCollapsed }) => {
   return (
     <aside className={`sidebar-wrapper${collapsed ? " collapsed" : ""}`}>
       <button
