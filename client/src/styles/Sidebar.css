@@ -10,7 +10,10 @@
   padding-left: 10px;
   padding-right: 10px;
   transition: width 0.3s;
-  position: relative;
+  position: fixed; /* changed from relative to fixed */
+  top: 0;
+  left: 0;
+  z-index: 100;
 }
 
 .sidebar-wrapper.collapsed {
@@ -120,12 +123,6 @@
 
 .navigations img {
   width: 22px;
-}
-
-.navigations li.logout {
-  margin-top: 40px;
-  color: #515151;
-  font-size: 16px;
 }
 
 .navigations li:hover {
