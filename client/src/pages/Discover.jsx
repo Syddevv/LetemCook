@@ -62,7 +62,7 @@ const DiscoverRecipes = () => {
                 <img
                   src={Pasta}
                   alt="Classic Pasta Carbonara"
-                  className="recipe-image"
+                  className="recipe-picture"
                 />
 
                 <div className="recipe-like">
