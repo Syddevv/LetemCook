@@ -6,7 +6,6 @@ import LikeRecipe from "../assets/Like Recipe.png";
 import ServingIcon from "../assets/Serving Icon.png";
 import Clock from "../assets/clock.png";
 import ViewRecipeIcon from "../assets/link.png";
-import "../styles/Community.css";
 
 const CommunityRecipes = () => {
   const [collapsed, setCollapsed] = useState(false);
