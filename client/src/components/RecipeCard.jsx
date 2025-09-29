@@ -1,11 +1,15 @@
 import Pasta from "../assets/pasta.jpg";
 import LikeRecipe from "../assets/Like Recipe.png";
+import Heart from "../assets/love.png";
 import ServingIcon from "../assets/Serving Icon.png";
 import Clock from "../assets/clock.png";
 import ViewRecipeIcon from "../assets/link.png";
 import "../styles/RecipeCard.css";
+import { useState } from "react";
 
 const RecipeCard = () => {
+  const [liked, setLiked] = useState(false);
+
   return (
     <div className="recipes">
       <div className="recipe-box">
@@ -17,7 +21,12 @@ const RecipeCard = () => {
           />
 
           <div className="recipe-like">
-            <img src={LikeRecipe} alt="Like" className="like-icon" />
+            <img
+              src={liked ? Heart : LikeRecipe}
+              alt="Like"
+              className="like-icon"
+              onClick={() => (liked ? setLiked(false) : setLiked(true))}
+            />
             <span>23</span>
           </div>
         </div>
