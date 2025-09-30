@@ -49,3 +49,31 @@
   background-clip: text;
   color: transparent;
 }
+
+.recipes {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* Default: 4 columns */
+  gap: 5px;
+  margin-top: 32px;
+}
+
+.recipes.collapsed {
+  grid-template-columns: repeat(
+    6,
+    1fr
+  ); /* 5 columns when sidebar is collapsed */
+}
+
+/* Responsive fallback for smaller screens */
+@media (max-width: 1200px) {
+  .recipes,
+  .recipes.collapsed {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 800px) {
+  .recipes,
+  .recipes.collapsed {
+    grid-template-columns: 1fr;
+  }
+}

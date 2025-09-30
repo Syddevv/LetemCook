@@ -52,7 +52,15 @@ const DiscoverRecipes = () => {
             <p>Discover mouth-watering recipes from across the web</p>
           </div>
 
-          <RecipeCard />
+          <div className={`recipes ${collapsed ? "collapsed" : ""}`}>
+            <RecipeCard />
+            <RecipeCard />
+            <RecipeCard />
+            <RecipeCard />
+            <RecipeCard />
+            <RecipeCard />
+            <RecipeCard />
+          </div>
         </div>
       </div>
     </div>
