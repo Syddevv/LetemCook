@@ -28,6 +28,12 @@
   flex-direction: column;
   margin: 16px 0;
   padding-bottom: 0;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.recipe-box:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 6px 18px rgba(249, 116, 80, 0.15);
 }
 
 .recipe-card,
