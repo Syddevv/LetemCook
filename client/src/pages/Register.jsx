@@ -23,7 +23,7 @@ const RegistrationPage = () => {
                 is better together
               </h1>
               <div className="sub-tagline">
-                <hr />
+                <hr className="sub-tag-hr" />
                 <p>Join the table</p>
               </div>
             </div>
