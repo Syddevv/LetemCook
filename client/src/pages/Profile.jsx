@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import Sidebar from "../components/SideBar";
+import Sidebar from "../components/Sidebar";
 import Logo from "../assets/Logo.png";
 import "../styles/Profile.css";
 import ProfilePic from "../assets/syd-ig-profile.jpg";
