@@ -78,6 +78,21 @@
   transform: translateY(-2px);
 }
 
+.update-photo-button {
+  background-color: #ff7b29;
+  margin-top: 10px;
+  border-radius: 4px;
+  border: none;
+  color: white;
+  padding: 5px 15px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.update-photo-button:hover {
+  background: #f97450;
+}
+
 /* UPDATE PASSSWORD CARD */
 
 .settings-grid-2 {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Sidebar from "../components/Sidebar";
 import Logo from "../assets/Logo.png";
 import AccountIcon from "../assets/Account Settings.png";
@@ -10,12 +10,25 @@ import "../styles/Settings.css";
 const Settings = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [cookingTitle, setCookingTitle] = useState("Home Cook");
+  const fileInputRef = useRef(null);
+
   const handleAccountChanges = (e) => {
     e.preventDefault();
   };
 
   const handleChangePassword = (e) => {
     e.preventDefault();
+  };
+
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      console.log("Selected file:", file);
+    }
   };
 
   return (
@@ -53,6 +66,25 @@ const Settings = () => {
 
               <div className="account-settings-contents">
                 <img src={ProfilePic} alt="profile-pic" />
+
+                <div>
+                  <button
+                    className="update-photo-button"
+                    type="button"
+                    onClick={handleButtonClick}
+                  >
+                    Change Photo
+                  </button>
+
+                  {/* Hidden file input */}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={fileInputRef}
+                    style={{ display: "none" }}
+                    onChange={handleFileChange}
+                  />
+                </div>
 
                 <form
                   onSubmit={handleAccountChanges}
