@@ -6,9 +6,11 @@ import Clock from "../assets/clock.png";
 import ViewRecipeIcon from "../assets/link.png";
 import "../styles/RecipeCard.css";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const RecipeCard = () => {
   const [liked, setLiked] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div className="recipes">
@@ -45,7 +47,10 @@ const RecipeCard = () => {
               servings
             </span>
           </div>
-          <button className="view-recipe-btn">
+          <button
+            className="view-recipe-btn"
+            onClick={() => navigate("/recipe-details")}
+          >
             <img
               src={ViewRecipeIcon}
               alt="view-recipe"
