@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import Sidebar from "../components/SideBar";
+import Sidebar from "../components/Sidebar";
 import RecipeCard from "../components/RecipeCard";
 import Logo from "../assets/Logo.png";
 

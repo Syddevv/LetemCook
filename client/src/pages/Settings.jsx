@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Sidebar from "../components/SideBar";
+import Sidebar from "../components/Sidebar";
 import Logo from "../assets/Logo.png";
 import AccountIcon from "../assets/Account Settings.png";
 import LockIcon from "../assets/Update Password.png";
