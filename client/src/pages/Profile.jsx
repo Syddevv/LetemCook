@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Logo from "../assets/Logo.png";
 import "../styles/Profile.css";
@@ -10,8 +10,7 @@ import RecipesShared from "../assets/Recipes Shared.png";
 import MacAndCheese from "../assets/mac & cheese.jpg";
 import StreakIcon from "../assets/Cooking Streak.png";
 
-const Profile = () => {
-  const [collapsed, setCollapsed] = useState(false);
+const Profile = ({ collapsed, setCollapsed }) => {
   const navRef = useRef(null);
 
   useEffect(() => {

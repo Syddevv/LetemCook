@@ -1,13 +1,11 @@
 import Sidebar from "../components/Sidebar";
-import React, { useState } from "react";
 import Logo from "../assets/Logo.png";
 import BackIcon from "../assets/back.png";
 import { useNavigate } from "react-router-dom";
 import EditIcon from "../assets/edit icon.png";
 import "../styles/EditRecipe.css";
 
-const EditRecipe = () => {
-  const [collapsed, setCollapsed] = useState(false);
+const EditRecipe = ({ collapsed, setCollapsed }) => {
   const navigate = useNavigate();
 
   return (

@@ -1,10 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
-import Sidebar from "../components/SideBar";
+import React, { useRef, useEffect } from "react";
+import Sidebar from "../components/Sidebar";
 import Logo from "../assets/Logo.png";
 import RecipeCard from "../components/RecipeCard";
 
-const CommunityRecipes = () => {
-  const [collapsed, setCollapsed] = useState(false);
+const CommunityRecipes = ({ collapsed, setCollapsed }) => {
   const navRef = useRef(null);
 
   useEffect(() => {

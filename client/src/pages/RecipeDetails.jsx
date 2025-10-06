@@ -1,5 +1,5 @@
 import Sidebar from "../components/Sidebar";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import Logo from "../assets/Logo.png";
 import BackIcon from "../assets/back.png";
 import "../styles/RecipeDetails.css";
@@ -8,8 +8,7 @@ import Clock from "../assets/clock.png";
 import ServingIcon from "../assets/Serving Icon.png";
 import { useNavigate } from "react-router-dom";
 
-const RecipeDetails = () => {
-  const [collapsed, setCollapsed] = useState(false);
+const RecipeDetails = ({ collapsed, setCollapsed }) => {
   const navRef = useRef(null);
   const navigate = useNavigate();
 

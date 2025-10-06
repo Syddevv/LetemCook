@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import Sidebar from "../components/Sidebar";
 import Logo from "../assets/Logo.png";
 import Pasta from "../assets/pasta.jpg";
@@ -10,8 +10,7 @@ import Delete from "../assets/delete icon.png";
 import "../styles/MyRecipes.css";
 import { useNavigate } from "react-router-dom";
 
-const MyRecipe = () => {
-  const [collapsed, setCollapsed] = useState(false);
+const MyRecipe = ({ collapsed, setCollapsed }) => {
   const navRef = useRef(null);
   const navigate = useNavigate();
 

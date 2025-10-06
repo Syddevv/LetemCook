@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useRef, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Logo from "../assets/Logo.png";
 import AccountIcon from "../assets/Account Settings.png";
@@ -7,8 +7,7 @@ import ProfilePic from "../assets/syd-ig-profile.jpg";
 import AppInfo from "../assets/App Information.png";
 import "../styles/Settings.css";
 
-const Settings = () => {
-  const [collapsed, setCollapsed] = useState(false);
+const Settings = ({ collapsed, setCollapsed }) => {
   const [cookingTitle, setCookingTitle] = useState("Home Cook");
   const fileInputRef = useRef(null);
 
