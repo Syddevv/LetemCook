@@ -8,10 +8,12 @@ import Clock from "../assets/clock.png";
 import Edit from "../assets/edit icon.png";
 import Delete from "../assets/delete icon.png";
 import "../styles/MyRecipes.css";
+import { useNavigate } from "react-router-dom";
 
 const MyRecipe = () => {
   const [collapsed, setCollapsed] = useState(false);
   const navRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -192,7 +194,10 @@ const MyRecipe = () => {
                       Delete
                     </button>
 
-                    <button className="edit-recipe-btn">
+                    <button
+                      className="edit-recipe-btn"
+                      onClick={() => navigate("/edit-recipe")}
+                    >
                       <img src={Edit} alt="edit-icon" className="edit-icon" />
                       Edit
                     </button>
