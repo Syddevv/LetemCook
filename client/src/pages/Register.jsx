@@ -3,11 +3,38 @@ import Logo from "../assets/Logo.png";
 import Poster from "../assets/Chef-pana.png";
 import NavBar from "../components/NavBar";
 import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const RegistrationPage = () => {
-  const handleSubmit = (e) => {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPass, setConfirmPass] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic here
+
+    if (password != confirmPass) {
+      console.log("Password must be the same.");
+    } else {
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/api/auth/register",
+          { username, email, password }
+        );
+
+        if (response.data.success) {
+          console.log("User registered successfully");
+          navigate("/login");
+        }
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
   };
 
   return (
@@ -47,17 +74,32 @@ const RegistrationPage = () => {
             <form onSubmit={handleSubmit}>
               <div>
                 <label htmlFor="username">Username</label>
-                <input type="text" id="username" name="username" required />
+                <input
+                  type="text"
+                  id="username"
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                />
               </div>
 
               <div>
                 <label htmlFor="email">Email</label>
-                <input type="email" id="email" name="email" required />
+                <input
+                  type="email"
+                  id="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
               </div>
 
               <div>
                 <label htmlFor="password">Password</label>
-                <input type="password" id="password" name="password" required />
+                <input
+                  type="password"
+                  id="password"
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
               </div>
 
               <div>
@@ -65,7 +107,7 @@ const RegistrationPage = () => {
                 <input
                   type="password"
                   id="confirm-pass"
-                  name="confirmPass"
+                  onChange={(e) => setConfirmPass(e.target.value)}
                   required
                 />
               </div>
