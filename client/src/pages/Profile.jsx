@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef } from "react";
 import Sidebar from "../components/Sidebar";
 import Logo from "../assets/Logo.png";
 import "../styles/Profile.css";
@@ -12,18 +12,6 @@ import StreakIcon from "../assets/Cooking Streak.png";
 
 const Profile = ({ collapsed, setCollapsed }) => {
   const navRef = useRef(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 30) {
-        navRef.current.classlist.add("transparent");
-      } else {
-        navRef.current.classlist.remove("transparent");
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   return (
     <div className="page-wrapper">
