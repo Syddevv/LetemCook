@@ -14,13 +14,12 @@ export const middleware = async (req, res, next) => {
       return res.status(401).json({ success: false, message: "Wrong Token" });
     }
 
-    const user = await User.findById({ _id: decoded.id });
+    const user = await User.findById(decoded.id);
     if (!user) {
       return res.status(401).json({ success: false, message: "No User" });
     }
 
-    const newUser = { username: user.username, id: user._id };
-    req.user = newUser;
+    req.user = user;
     next();
   } catch (error) {
     return res.status(500).json({ success: false, message: "Please Login" });
