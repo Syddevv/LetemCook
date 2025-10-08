@@ -6,10 +6,12 @@ import LockIcon from "../assets/Update Password.png";
 import ProfilePic from "../assets/syd-ig-profile.jpg";
 import AppInfo from "../assets/App Information.png";
 import "../styles/Settings.css";
+import { useAuth } from "../context/authContext";
 
 const Settings = ({ collapsed, setCollapsed }) => {
   const [cookingTitle, setCookingTitle] = useState("Home Cook");
   const fileInputRef = useRef(null);
+  const { user } = useAuth();
 
   const handleAccountChanges = (e) => {
     e.preventDefault();
@@ -95,7 +97,7 @@ const Settings = ({ collapsed, setCollapsed }) => {
                       type="text"
                       id="username"
                       name="username"
-                      placeholder="Your username"
+                      placeholder={user ? `@${user.username}` : ""}
                       required
                     />
                   </div>
@@ -106,7 +108,7 @@ const Settings = ({ collapsed, setCollapsed }) => {
                       type="email"
                       id="email"
                       name="email"
-                      placeholder="your.email@gmail.com"
+                      placeholder={user ? `${user.email}` : ""}
                       required
                     />
                   </div>
@@ -141,7 +143,7 @@ const Settings = ({ collapsed, setCollapsed }) => {
                     <textarea
                       id="bio"
                       className="bio"
-                      placeholder="Tell us about your cooking journey"
+                      placeholder={user ? `${user.userBio}` : ""}
                     ></textarea>
                   </div>
 
