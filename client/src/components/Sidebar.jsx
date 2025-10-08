@@ -10,6 +10,7 @@ import LogoutIcon from "../assets/logout.png";
 import CollapseOpen from "../assets/open-sidebar.png";
 import CollapseClose from "../assets/close-sidebar.png";
 import "../styles/Sidebar.css";
+import { useAuth } from "../context/authContext.js";
 
 const navItems = [
   { label: "Discover Recipes", icon: DiscoverIcon, route: "/discover" },
@@ -23,6 +24,12 @@ const navItems = [
 const Sidebar = ({ collapsed, setCollapsed }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   return (
     <aside className={`sidebar-wrapper${collapsed ? " collapsed" : ""}`}>
@@ -37,8 +44,8 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
       {!collapsed && (
         <div className="profile-wrapper">
           <img src={Profilepic} alt="profile-picture" className="profile-pic" />
-          <p className="profile-username">@syduu</p>
-          <p className="profile-bio">Home Cook & Recipe Enthusiast</p>
+          {user && <p className="profile-username">@{user.username}</p>}
+          {user && <p className="profile-bio">{user.cookingTitle}</p>}
         </div>
       )}
 
@@ -53,7 +60,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
             {!collapsed && item.label}
           </li>
         ))}
-        <li className="logout">
+        <li className="logout" onClick={handleLogout}>
           <img src={LogoutIcon} alt="Logout" />
           {!collapsed && "Logout"}
         </li>
