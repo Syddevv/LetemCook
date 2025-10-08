@@ -143,7 +143,11 @@ const Settings = ({ collapsed, setCollapsed }) => {
                     <textarea
                       id="bio"
                       className="bio"
-                      placeholder={user ? `${user.userBio}` : ""}
+                      placeholder={
+                        user?.userBio
+                          ? `${user.userBio}`
+                          : "Tell us your cooking journey"
+                      }
                     ></textarea>
                   </div>
 

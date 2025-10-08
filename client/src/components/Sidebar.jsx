@@ -11,6 +11,7 @@ import CollapseOpen from "../assets/open-sidebar.png";
 import CollapseClose from "../assets/close-sidebar.png";
 import "../styles/Sidebar.css";
 import { useAuth } from "../context/authContext.js";
+import DefaultPic from "../assets/default profile.png";
 
 const navItems = [
   { label: "Discover Recipes", icon: DiscoverIcon, route: "/discover" },
@@ -43,7 +44,14 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
 
       {!collapsed && (
         <div className="profile-wrapper">
-          <img src={Profilepic} alt="profile-picture" className="profile-pic" />
+          {user && (
+            <img
+              src={user.profilePicture ? user.profilePicture : DefaultPic}
+              alt="profile-picture"
+              className="profile-pic"
+            />
+          )}
+
           {user && <p className="profile-username">@{user.username}</p>}
           {user && <p className="profile-bio">{user.cookingTitle}</p>}
         </div>
