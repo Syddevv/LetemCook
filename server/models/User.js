@@ -13,7 +13,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: "Home Cook",
     },
-    userBio: { type: String, default: "No bio" },
+    userBio: { type: String, default: "" },
     recipesShared: {
       type: Number,
       default: 0,
