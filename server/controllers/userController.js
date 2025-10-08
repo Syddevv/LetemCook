@@ -68,6 +68,16 @@ export const loginUser = async (req, res) => {
         id: user._id,
         username: user.username,
         email: user.email,
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        cookingTitle: user.cookingTitle,
+        profilePicture: user.profilePicture,
+        bio: user.bio,
+        totalLikes: user.totalLikes,
+        recipesLiked: user.recipesLiked,
+        recipesShared: user.recipesShared,
+        cookingStreak: user.cookingStreak,
       },
     });
   } catch (error) {
