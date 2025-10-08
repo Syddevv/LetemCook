@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-import { AuthContext } from "./authContext";
+import { AuthContext } from "./authContext.js";
 
 const ContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -32,7 +32,6 @@ const ContextProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem("token");
     setUser(null);
-    window.location.reload();
   };
 
   return (
