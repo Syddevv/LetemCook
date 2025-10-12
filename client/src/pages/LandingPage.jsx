@@ -7,8 +7,11 @@ import Sharing from "../assets/sharing.png";
 import Clock from "../assets/clock.png";
 import ServingIcon from "../assets/Serving Icon.png";
 import NavBar from "../components/NavBar";
+import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
+  const navigate = useNavigate();
+
   return (
     <div>
       <NavBar />
@@ -23,11 +26,13 @@ const LandingPage = () => {
           <p>and let everyone cook together.</p>
 
           <div className="hero-buttons">
-            <button className="start-cooking-btn">
+            <button
+              className="start-cooking-btn"
+              onClick={() => navigate("/login")}
+            >
               Start Cooking
               <img src={Arrow} alt="arrow" className="btn-arrow" />
             </button>
-            <button className="browse-recipes-btn">Browse Recipes</button>
           </div>
         </div>
 
@@ -187,7 +192,12 @@ const LandingPage = () => {
           Join thousands of home cooks sharing their passion for great food.
         </p>
         <p>Your next favorite recipe is just a click away!</p>
-        <button className="createAccount-button">Create Account</button>
+        <button
+          className="createAccount-button"
+          onClick={() => navigate("/register")}
+        >
+          Create Account
+        </button>
       </div>
 
       <footer>

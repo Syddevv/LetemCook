@@ -7,6 +7,7 @@ import ProfilePic from "../assets/syd-ig-profile.jpg";
 import AppInfo from "../assets/App Information.png";
 import "../styles/Settings.css";
 import { useAuth } from "../context/authContext";
+import DefaultPic from "../assets/default profile.png";
 
 const Settings = ({ collapsed, setCollapsed }) => {
   const [cookingTitle, setCookingTitle] = useState("Home Cook");
@@ -66,7 +67,12 @@ const Settings = ({ collapsed, setCollapsed }) => {
               </p>
 
               <div className="account-settings-contents">
-                <img src={ProfilePic} alt="profile-pic" />
+                {user && (
+                  <img
+                    src={user.profilePicture ? user.profilePicture : DefaultPic}
+                    alt="profile-picture"
+                  />
+                )}
 
                 <div>
                   <button
