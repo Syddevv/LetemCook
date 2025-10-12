@@ -1,10 +1,11 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Logo from "../assets/Logo.png";
 import RecipeCard from "../components/RecipeCard";
 
 const CommunityRecipes = ({ collapsed, setCollapsed }) => {
   const navRef = useRef(null);
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,11 +47,33 @@ const CommunityRecipes = ({ collapsed, setCollapsed }) => {
 
         <div className="recipes-wrapper">
           <div className="recipes-header">
-            <h1>Community Recipes</h1>
-            <p>Explore delicious recipes from our community</p>
+            <div>
+              <h1>Discover Recipes</h1>
+              <p>Explore delicious recipes from our community</p>
+            </div>
+
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="category-select"
+            >
+              <option value="all">All Categories</option>
+              <option value="main course">Main Course</option>
+              <option value="side dish">Side Dish</option>
+              <option value="dessert">Dessert</option>
+              <option value="appetizer">Appetizer</option>
+              <option value="salad">Salad</option>
+              <option value="breakfast">Breakfast</option>
+              <option value="soup">Soup</option>
+              <option value="beverage">Beverage</option>
+              <option value="snack">Snack</option>
+              <option value="drink">Drink</option>
+            </select>
           </div>
 
-          <RecipeCard />
+          <div className={`recipes ${collapsed ? "collapsed" : ""}`}>
+            <RecipeCard />
+          </div>
         </div>
       </div>
     </div>
