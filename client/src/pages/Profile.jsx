@@ -2,16 +2,18 @@ import React, { useRef } from "react";
 import Sidebar from "../components/Sidebar";
 import Logo from "../assets/Logo.png";
 import "../styles/Profile.css";
-import ProfilePic from "../assets/syd-ig-profile.jpg";
+import DefaultPic from "../assets/default profile.png";
 import Calendar from "../assets/Member Since.png";
 import TotalLikes from "../assets/Total Likes.png";
 import RecipesLiked from "../assets/Recipes Liked.png";
 import RecipesShared from "../assets/Recipes Shared.png";
 import MacAndCheese from "../assets/mac & cheese.jpg";
 import StreakIcon from "../assets/Cooking Streak.png";
+import { useAuth } from "../context/authContext";
 
 const Profile = ({ collapsed, setCollapsed }) => {
   const navRef = useRef(null);
+  const { user } = useAuth();
 
   return (
     <div className="page-wrapper">
@@ -49,18 +51,26 @@ const Profile = ({ collapsed, setCollapsed }) => {
             <div className="profile-grid-1">
               {/* Profile Info */}
               <div className="profile-card profile-info">
-                <img src={ProfilePic} alt="profile-pic" />
-                <h3>@syduu</h3>
-                <p>Home Cook & Recipe Enthusiast</p>
-                <blockquote>
-                  "Cooking is not just about convenience. It's about love."
-                </blockquote>
+                {user && (
+                  <img
+                    src={user.profilePicture ? user.profilePicture : DefaultPic}
+                    alt="profile-picture"
+                  />
+                )}
+                {user && <h3>@{user.username}</h3>}
+                {user && <p>{user.cookingTitle}</p>}
+
+                {user?.userBio ? (
+                  <blockquote>{user.userBio}</blockquote>
+                ) : (
+                  <blockquote>No bio</blockquote>
+                )}
               </div>
 
               {/* First row stats */}
               <div className="stats1">
                 <div className="profile-card">
-                  <h3>12</h3>
+                  {user && <h3>{user.recipesSharedTotal}</h3>}
                   <p>Recipes Shared</p>
                   <img
                     src={RecipesShared}
@@ -68,8 +78,9 @@ const Profile = ({ collapsed, setCollapsed }) => {
                     className="icon"
                   />
                 </div>
+
                 <div className="profile-card">
-                  <h3>24</h3>
+                  {user && <h3>{user.totalLikes}</h3>}
                   <p>Total Likes</p>
                   <img
                     src={TotalLikes}
@@ -82,7 +93,7 @@ const Profile = ({ collapsed, setCollapsed }) => {
               {/* Second row stats */}
               <div className="stats2">
                 <div className="profile-card">
-                  <h3>8</h3>
+                  {user && <h3>{user.recipesLikedTotal}</h3>}
                   <p>Recipes Liked</p>
                   <img
                     src={RecipesLiked}
@@ -90,6 +101,7 @@ const Profile = ({ collapsed, setCollapsed }) => {
                     className="icon"
                   />
                 </div>
+
                 <div className="profile-card">
                   <h3>Today</h3>
                   <p>Member Since</p>
@@ -120,11 +132,17 @@ const Profile = ({ collapsed, setCollapsed }) => {
                   </p>
                 </div>
               </div>
+
               <div className="cooking-streak">
                 <p>Cooking Streak</p>
                 <div className="cooking-streak-content">
                   <img src={StreakIcon} alt="streak-icon" />
-                  <p>You’ve shared/liked recipes for 3 days in a row.</p>
+                  {user && (
+                    <p>
+                      You’ve shared/liked recipes for {user.cookingStreak} days
+                      in a row.
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
