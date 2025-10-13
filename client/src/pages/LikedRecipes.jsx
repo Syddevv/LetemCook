@@ -45,7 +45,7 @@ const LikedRecipes = ({ collapsed, setCollapsed }) => {
         </div>
 
         <div className="recipes-wrapper">
-          <div className="recipes-header">
+          <div className="recipes-header-2">
             <h1>Liked Recipes</h1>
             <p>Your favorite recipes collection</p>
           </div>

@@ -53,7 +53,7 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
         </div>
 
         <div className="my-recipes-wrapper">
-          <div className="recipes-header">
+          <div className="recipes-header-2">
             <h1>My Recipes</h1>
             <p>Create and manage your recipe collection</p>
           </div>

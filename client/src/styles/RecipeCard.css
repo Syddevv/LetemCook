@@ -7,12 +7,14 @@
   margin-top: 70px;
 }
 
-.recipes-header h1 {
+.recipes-header h1,
+.recipes-header-2 h1 {
   color: #f97450;
   font-family: Reem kufi;
 }
 
-.recipes-header p {
+.recipes-header p,
+.recipes-header-2 p {
   color: #a1a1a1;
   margin-top: 2px;
 }
