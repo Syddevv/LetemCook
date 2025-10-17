@@ -76,8 +76,10 @@ export const loginUser = async (req, res) => {
         bio: user.bio,
         totalLikes: user.totalLikes,
         recipesLiked: user.recipesLiked,
-        recipesShared: user.recipesShared,
+        recipesSharedTotal: user.recipesSharedTotal,
+        recipes: user.recipes,
         cookingStreak: user.cookingStreak,
+        likedRecipesTotal: user.likedRecipesTotal,
       },
     });
   } catch (error) {

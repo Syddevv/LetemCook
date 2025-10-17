@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 
 const UserSchema = new mongoose.Schema(
   {
@@ -14,18 +14,31 @@ const UserSchema = new mongoose.Schema(
       default: "Home Cook",
     },
     userBio: { type: String, default: "" },
-    recipesShared: {
+    recipesSharedTotal: {
       type: Number,
       default: 0,
     },
+    recipes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Recipe",
+      },
+    ],
+
     totalLikes: {
       type: Number,
       default: 0,
     },
-    recipesLiked: {
+    recipesLikedTotal: {
       type: Number,
       default: 0,
     },
+    likedRecipes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Recipe",
+      },
+    ],
     mostLikedRecipe: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Recipe",
