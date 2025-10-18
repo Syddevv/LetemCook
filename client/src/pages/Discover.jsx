@@ -72,15 +72,7 @@ const DiscoverRecipes = ({ collapsed, setCollapsed }) => {
             </select>
           </div>
 
-          <div className={`recipes ${collapsed ? "collapsed" : ""}`}>
-            <RecipeCard />
-            <RecipeCard />
-            <RecipeCard />
-            <RecipeCard />
-            <RecipeCard />
-            <RecipeCard />
-            <RecipeCard />
-          </div>
+          <div className={`recipes ${collapsed ? "collapsed" : ""}`}></div>
         </div>
       </div>
     </div>
