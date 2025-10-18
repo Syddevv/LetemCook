@@ -2,10 +2,26 @@ import React, { useRef, useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Logo from "../assets/Logo.png";
 import RecipeCard from "../components/RecipeCard";
+import axios from "axios";
 
 const CommunityRecipes = ({ collapsed, setCollapsed }) => {
   const navRef = useRef(null);
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [recipes, setRecipes] = useState([]);
+
+  // Fetch community recipes from backend
+  useEffect(() => {
+    const fetchRecipes = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/recipes/all");
+        setRecipes(res.data);
+      } catch (err) {
+        console.error("Error fetching recipes:", err);
+      }
+    };
+
+    fetchRecipes();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -48,7 +64,7 @@ const CommunityRecipes = ({ collapsed, setCollapsed }) => {
         <div className="recipes-wrapper">
           <div className="recipes-header">
             <div>
-              <h1>Discover Recipes</h1>
+              <h1>Community Recipes</h1>
               <p>Explore delicious recipes from our community</p>
             </div>
 
@@ -72,7 +88,13 @@ const CommunityRecipes = ({ collapsed, setCollapsed }) => {
           </div>
 
           <div className={`recipes ${collapsed ? "collapsed" : ""}`}>
-            <RecipeCard />
+            {recipes.length > 0 ? (
+              recipes.map((recipe) => (
+                <RecipeCard key={recipe._id} recipe={recipe} />
+              ))
+            ) : (
+              <p>No recipes found.</p>
+            )}
           </div>
         </div>
       </div>

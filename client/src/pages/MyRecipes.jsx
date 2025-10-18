@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import axios from "axios";
 import Sidebar from "../components/Sidebar";
 import Logo from "../assets/Logo.png";
 import Pasta from "../assets/pasta.jpg";
@@ -13,6 +14,84 @@ import { useNavigate } from "react-router-dom";
 const MyRecipe = ({ collapsed, setCollapsed }) => {
   const navRef = useRef(null);
   const navigate = useNavigate();
+  const [imagePreview, setImagePreview] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    ingredients: "",
+    instructions: "",
+    servings: "",
+    cookingTime: "",
+    recipeImage: null,
+    likes: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    setFormData({
+      ...formData,
+      [name]: files ? files[0] : value,
+    });
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file)); // for preview
+    }
+  };
+
+  const handleClear = () => {
+    setImageFile(null);
+    setImagePreview(null);
+    // manually clear the input using a ref
+    fileInputRef.current.value = "";
+  };
+
+  const fileInputRef = useRef();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const data = new FormData();
+    Object.keys(formData).forEach((key) => {
+      if (key !== "recipeImage") data.append(key, formData[key]);
+    });
+
+    if (imageFile) {
+      data.append("recipeImage", imageFile);
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+      await axios.post("http://localhost:5000/api/recipes", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      alert("Recipe added successfully!");
+
+      setFormData({
+        title: "",
+        description: "",
+        ingredients: "",
+        instructions: "",
+        servings: "",
+        cookingTime: "",
+        recipeImage: null,
+        likes: "",
+      });
+      setImageFile(null);
+      setImagePreview(null);
+    } catch (err) {
+      console.error("UPLOAD ERROR:", err);
+      alert("Failed to add recipe");
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -59,7 +138,7 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
           </div>
 
           <div className="add-new-recipe-card">
-            <form className="add-recipe-form-container">
+            <form onSubmit={handleSubmit} className="add-recipe-form-container">
               <h2 className="add-recipe-title">+ Add New Recipe</h2>
               <div className="add-recipe-form">
                 <div className="left-inputs">
@@ -70,6 +149,8 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
                         type="text"
                         id="recipe-title"
                         name="title"
+                        value={formData.title}
+                        onChange={handleChange}
                         required
                       />
                     </div>
@@ -79,15 +160,20 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
                         type="number"
                         id="servings"
                         name="servings"
+                        value={formData.servings}
+                        onChange={handleChange}
                         required
                       />
                     </div>
                     <div className="input-group">
                       <label htmlFor="cooking-time">Cooking Time *</label>
                       <input
-                        type="text"
+                        type="number"
                         id="cooking-time"
                         name="cookingTime"
+                        value={formData.cookingTime}
+                        placeholder="in minutes: ex. 20"
+                        onChange={handleChange}
                         required
                       />
                     </div>
@@ -95,7 +181,13 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
                   <div className="input-row-2">
                     <div className="input-group wide">
                       <label htmlFor="description">Description *</label>
-                      <textarea id="description" name="description" required />
+                      <textarea
+                        id="description"
+                        name="description"
+                        value={formData.description}
+                        onChange={handleChange}
+                        required
+                      />
                     </div>
                   </div>
                   <div className="input-row-3">
@@ -107,18 +199,38 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
                         id="ingredients"
                         name="ingredients"
                         placeholder="Example: pizza dough, mozzarella, tomatoes"
+                        value={formData.ingredients}
+                        onChange={handleChange}
                         required
                       />
                     </div>
                     <div class="input-row">
-                      <div className="input-group">
-                        <label htmlFor="recipeImage">Upload Image *</label>
+                      <div
+                        className="input-group"
+                        style={{ marginTop: "32px" }}
+                      >
                         <input
                           type="file"
-                          id="recipeImage"
-                          name="recipeImage"
                           accept="image/*"
+                          name="recipeImage"
+                          onChange={handleFileChange}
+                          ref={fileInputRef}
                         />
+
+                        {imagePreview && (
+                          <div>
+                            <img
+                              src={imagePreview}
+                              alt="Preview"
+                              style={{
+                                width: "150px",
+                                height: "150px",
+                                objectFit: "cover",
+                              }}
+                            />
+                            <button onClick={handleClear}>Remove</button>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -134,6 +246,8 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
 2. Roll out pizza dough
 3. Add sauce and cheese
 4. Bake for 12–15 minutes"
+                      value={formData.instructions}
+                      onChange={handleChange}
                       required
                     />
                   </div>

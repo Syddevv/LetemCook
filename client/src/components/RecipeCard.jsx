@@ -8,7 +8,7 @@ import "../styles/RecipeCard.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const RecipeCard = () => {
+const RecipeCard = ({ recipe }) => {
   const [liked, setLiked] = useState(false);
   const navigate = useNavigate();
 
@@ -17,8 +17,8 @@ const RecipeCard = () => {
       <div className="recipe-box">
         <div className="recipe-image-wrapper">
           <img
-            src={Pasta}
-            alt="Classic Pasta Carbonara"
+            src={recipe.image}
+            alt={recipe.title}
             className="recipe-picture"
           />
 
@@ -29,22 +29,26 @@ const RecipeCard = () => {
               className="like-icon"
               onClick={() => (liked ? setLiked(false) : setLiked(true))}
             />
-            <span>23</span>
+            <span>{recipe.likes}</span>
           </div>
         </div>
 
         <div className="recipe-content">
-          <h2 className="recipe-title">Classic Pasta Carbonara</h2>
+          <h2 className="recipe-title">{recipe.title}</h2>
           <p className="recipe-desc">
-            A creamy Roman pasta dish made with eggs, cheese, and ...
+            {recipe.description.length > 80
+              ? recipe.description.slice(0, 55) + "..."
+              : recipe.description}
           </p>
+
           <div className="recipe-info">
             <span>
-              <img src={Clock} alt="Time" className="info-icon" /> 25 mins
+              <img src={Clock} alt="Time" className="info-icon" />
+              {recipe.cookingTime} &nbsp; mins
             </span>
             <span>
-              <img src={ServingIcon} alt="Servings" className="info-icon" />2
-              servings
+              <img src={ServingIcon} alt="Servings" className="info-icon" />
+              {recipe.servings} &nbsp; servings
             </span>
           </div>
           <button
@@ -59,7 +63,9 @@ const RecipeCard = () => {
             View Recipe
           </button>
 
-          <p className="recipe-source">by Foodista.com</p>
+          <p className="recipe-source">
+            by <strong>{recipe.user?.username}</strong>
+          </p>
         </div>
       </div>
     </div>
