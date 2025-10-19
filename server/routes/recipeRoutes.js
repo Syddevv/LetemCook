@@ -12,7 +12,7 @@ const router = express.Router();
 const upload = multer({ dest: "uploads/" });
 
 router.post("/", middleware, upload.single("recipeImage"), addRecipe);
-router.get("/", middleware, getUserRecipes);
+router.get("/my-recipes", middleware, getUserRecipes);
 router.delete("/:id", middleware, deleteRecipe);
 router.get("/all", getAllRecipes);
 

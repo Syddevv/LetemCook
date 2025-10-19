@@ -148,6 +148,11 @@
   margin-top: 25px;
 }
 
+.my-recipes {
+  display: flex;
+  gap: 20px;
+}
+
 .my-recipes-header {
   font-weight: 600;
   font-size: 1.2rem;

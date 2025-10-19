@@ -2,18 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Sidebar from "../components/Sidebar";
 import Logo from "../assets/Logo.png";
-import Pasta from "../assets/pasta.jpg";
-import Heart from "../assets/Total Likes.png";
-import ServingIcon from "../assets/Serving Icon.png";
-import Clock from "../assets/clock.png";
-import Edit from "../assets/edit icon.png";
-import Delete from "../assets/delete icon.png";
 import "../styles/MyRecipes.css";
-import { useNavigate } from "react-router-dom";
+import UserRecipeCard from "../components/UserRecipeCard";
+import { useAuth } from "../context/authContext";
 
 const MyRecipe = ({ collapsed, setCollapsed }) => {
   const navRef = useRef(null);
-  const navigate = useNavigate();
   const [imagePreview, setImagePreview] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const [formData, setFormData] = useState({
@@ -27,6 +21,30 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
     likes: 0,
     category: "Main Course",
   });
+  const [recipes, setRecipes] = useState([]);
+  const { user } = useAuth();
+
+  // get user recipes
+  useEffect(() => {
+    const fetchUserRecipes = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await axios.get(
+          "http://localhost:5000/api/recipes/my-recipes",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setRecipes(res.data);
+      } catch (error) {
+        console.error("Error in fetching user recipes:", error.message);
+      }
+    };
+
+    fetchUserRecipes();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -72,6 +90,8 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
           Authorization: `Bearer ${token}`,
         },
       });
+
+      window.location.reload();
 
       alert("Recipe added successfully!");
 
@@ -283,65 +303,18 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
           </div>
 
           <div className="my-recipes-box-wrapper">
-            <h2 className="my-recipes-header">My Recipes (1)</h2>
+            <h2 className="my-recipes-header">
+              My Recipes ({user && user.recipesSharedTotal})
+            </h2>
 
             <div className="my-recipes">
-              <div className="recipe-box">
-                <div className="recipe-image-wrapper">
-                  <img
-                    src={Pasta}
-                    alt="Classic Pasta Carbonara"
-                    className="recipe-picture"
-                  />
-
-                  <div className="recipe-like">
-                    <img src={Heart} alt="Like" className="like-icon" />
-                    <span>23</span>
-                  </div>
-                </div>
-
-                <div className="recipe-content">
-                  <h2 className="recipe-title">Classic Pasta Carbonara</h2>
-                  <p className="recipe-desc">
-                    A creamy Roman pasta dish made with eggs, cheese, and ...
-                  </p>
-                  <div className="recipe-info">
-                    <span>
-                      <img src={Clock} alt="Time" className="info-icon" /> 25
-                      mins
-                    </span>
-                    <span>
-                      <img
-                        src={ServingIcon}
-                        alt="Servings"
-                        className="info-icon"
-                      />
-                      2 servings
-                    </span>
-                  </div>
-
-                  <div className="recipe-buttons">
-                    <button className="delete-recipe-btn">
-                      <img
-                        src={Delete}
-                        alt="delete-icon"
-                        className="delete-icon"
-                      />
-                      Delete
-                    </button>
-
-                    <button
-                      className="edit-recipe-btn"
-                      onClick={() => navigate("/edit-recipe")}
-                    >
-                      <img src={Edit} alt="edit-icon" className="edit-icon" />
-                      Edit
-                    </button>
-                  </div>
-
-                  <p className="recipe-source">by Foodista.com</p>
-                </div>
-              </div>
+              {recipes.length > 0 ? (
+                recipes.map((recipe) => (
+                  <UserRecipeCard key={recipe._id} recipe={recipe} />
+                ))
+              ) : (
+                <p>No recipes found.</p>
+              )}
             </div>
           </div>
         </div>

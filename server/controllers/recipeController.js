@@ -1,14 +1,12 @@
 import Recipe from "../models/Recipe.js";
 import { cloudinary } from "../utils/cloudinary.js";
+import User from "../models/User.js";
 import dotenv from "dotenv";
 dotenv.config();
 
 // Add new recipe
 export const addRecipe = async (req, res) => {
   try {
-    console.log("REQ BODY:", req.body);
-    console.log("REQ FILE:", req.file);
-
     const {
       title,
       servings,
@@ -19,12 +17,14 @@ export const addRecipe = async (req, res) => {
       likes,
       category,
     } = req.body;
+
     let imageUrl = null;
+
     if (req.file) {
       const uploadResult = await cloudinary.uploader.upload(req.file.path, {
-        folder: "recipes", // optional folder name in your Cloudinary dashboard
+        folder: "recipes",
       });
-      imageUrl = uploadResult.secure_url; // ✅ Cloudinary image URL
+      imageUrl = uploadResult.secure_url;
     }
 
     const newRecipe = await Recipe.create({
@@ -40,22 +40,34 @@ export const addRecipe = async (req, res) => {
       category,
     });
 
-    res.status(201).json({ success: true, recipe: newRecipe });
+    // incrementing total shared recipes by user
+    await User.findByIdAndUpdate(req.user._id, {
+      $inc: { recipesSharedTotal: 1 },
+      $push: { recipes: newRecipe._id },
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Recipe added successfully",
+      recipe: newRecipe,
+    });
   } catch (error) {
     console.error("ADD RECIPE ERROR:", error);
-    res
-      .status(500)
-      .json({ success: false, message: "Server Error", error: error.message });
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+      error: error.message,
+    });
   }
 };
 
 // Get all recipes by user
 export const getUserRecipes = async (req, res) => {
   try {
-    const recipes = await Recipe.find({ userId: req.user.id });
+    const recipes = await Recipe.find({ user: req.user.id });
     res.json(recipes);
   } catch (err) {
-    res.status(500).json({ message: "Error fetching recipes" });
+    res.status(500).json({ message: "Error fetching user recipes" });
   }
 };
 
@@ -69,6 +81,7 @@ export const deleteRecipe = async (req, res) => {
   }
 };
 
+// get all recipes
 export const getAllRecipes = async (req, res) => {
   try {
     const recipes = await Recipe.find().populate("user", "username"); // if you store user ID
