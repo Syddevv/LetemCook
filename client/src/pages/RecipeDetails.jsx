@@ -1,16 +1,19 @@
 import Sidebar from "../components/Sidebar";
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import Logo from "../assets/Logo.png";
 import BackIcon from "../assets/back.png";
 import "../styles/RecipeDetails.css";
 import Pizza from "../assets/pizza.jpg";
 import Clock from "../assets/clock.png";
 import ServingIcon from "../assets/Serving Icon.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 const RecipeDetails = ({ collapsed, setCollapsed }) => {
   const navRef = useRef(null);
   const navigate = useNavigate();
+  const { id } = useParams();
+  const [recipes, setRecipes] = useState([]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,6 +26,14 @@ const RecipeDetails = ({ collapsed, setCollapsed }) => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    const fetchRecipe = async () => {
+      const res = await axios.get(`http://localhost:5000/api/recipes/${id}`);
+      setRecipes(res.data);
+    };
+    fetchRecipe();
+  }, [id]);
 
   return (
     <div className="page-wrapper">
@@ -52,7 +63,7 @@ const RecipeDetails = ({ collapsed, setCollapsed }) => {
         <div className="recipe-details-box">
           <button
             className="back-to-discover-btn"
-            onClick={() => navigate("/discover")}
+            onClick={() => navigate("/community")}
           >
             <img src={BackIcon} alt="back-icon" />
             Back
@@ -60,20 +71,17 @@ const RecipeDetails = ({ collapsed, setCollapsed }) => {
 
           <div className="col-1">
             <div className="recipe-image-box">
-              <img src={Pizza} alt="recipe-image" />
+              <img src={recipes.image} alt="recipe-image" />
             </div>
 
             <div className="recipe-details-content">
-              <h1>Homemade Pizza Margherita</h1>
-              <p className="recipe-information">
-                Fresh tomatoes, mozzarella, and basil on a crispy homemade
-                crust. Pizza perfection!
-              </p>
+              <h1>{recipes.title}</h1>
+              <p className="recipe-information">{recipes.description}</p>
 
               <div className="recipe-info-icon-container">
                 <span>
-                  <img src={Clock} alt="Time" className="recipe-info-icon" /> 25
-                  mins
+                  <img src={Clock} alt="Time" className="recipe-info-icon" />{" "}
+                  {recipes.cookingTime} &nbsp; mins
                 </span>
                 <span>
                   <img
@@ -81,14 +89,14 @@ const RecipeDetails = ({ collapsed, setCollapsed }) => {
                     alt="Servings"
                     className="recipe-info-icon"
                   />
-                  2 servings
+                  {recipes.servings} &nbsp; servings
                 </span>
               </div>
 
               <hr />
 
               <p className="recipe-author">
-                Recipe by <strong>Italian Kitchen</strong>
+                Recipe by <strong>{recipes.user?.username}</strong>
               </p>
             </div>
           </div>
@@ -96,75 +104,29 @@ const RecipeDetails = ({ collapsed, setCollapsed }) => {
           <div className="col-2">
             <div className="ingredients-wrapper">
               <p className="ingredients-wrapper-title">Ingredients</p>
-              <div className="ingredients-card">
-                <p>
-                  <span className="dot"></span>Pizza Dough
-                </p>
-              </div>
-
-              <div className="ingredients-card">
-                <p>
-                  <span className="dot"></span>Tomatoes
-                </p>
-              </div>
-
-              <div className="ingredients-card">
-                <p>
-                  <span className="dot"></span>Mozzarella
-                </p>
-              </div>
-
-              <div className="ingredients-card">
-                <p>
-                  <span className="dot"></span>Fresh Basil
-                </p>
-              </div>
-
-              <div className="ingredients-card">
-                <p>
-                  <span className="dot"></span>olive Oil
-                </p>
-              </div>
+              {recipes.ingredients &&
+                recipes.ingredients.split(",").map((ingredient, index) => (
+                  <div key={index} className="ingredients-card">
+                    <p>
+                      <span className="dot"></span>
+                      {ingredient.trim()}
+                    </p>
+                  </div>
+                ))}
             </div>
 
             <div className="instructions-wrapper">
               <p className="instructions-wrapper-title">Instructions</p>
-              <div className="instructions-card">
-                <p className="instructions-num">1</p>
-                <p>Preheat oven to 475°F (245°C)</p>
-              </div>
-
-              <div className="instructions-card">
-                <p className="instructions-num">2</p>
-                <p>
-                  Roll out pizza dough on a floured surface to desired thickness
-                </p>
-              </div>
-
-              <div className="instructions-card">
-                <p className="instructions-num">3</p>
-                <p>Transfer dough to a pizza stone or baking sheet</p>
-              </div>
-
-              <div className="instructions-card">
-                <p className="instructions-num">4</p>
-                <p>
-                  Brush with olive oil and add a thin layer of crushed tomatoes
-                </p>
-              </div>
-
-              <div className="instructions-card">
-                <p className="instructions-num">5</p>
-                <p>Tear mozzarella into chunks and distribute evenly</p>
-              </div>
-
-              <div className="instructions-card">
-                <p className="instructions-num">6</p>
-                <p>
-                  Bake for 12-15 minutes until crust is golden and cheese is
-                  bubbly
-                </p>
-              </div>
+              {recipes.instructions &&
+                recipes.instructions
+                  .split(/\d+\.\s+/)
+                  .filter((step) => step.trim() !== "")
+                  .map((step, index) => (
+                    <div key={index} className="instructions-card">
+                      <p className="instructions-num">{index + 1}</p>
+                      <p>{step.trim()}</p>
+                    </div>
+                  ))}
             </div>
           </div>
         </div>

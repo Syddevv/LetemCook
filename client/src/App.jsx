@@ -64,7 +64,7 @@ function App() {
             }
           />
           <Route
-            path="/recipe-details"
+            path="/recipe-details/:id"
             element={
               <RecipeDetails
                 collapsed={collapsed}

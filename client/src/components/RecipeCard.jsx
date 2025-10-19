@@ -53,7 +53,7 @@ const RecipeCard = ({ recipe }) => {
           </div>
           <button
             className="view-recipe-btn"
-            onClick={() => navigate("/recipe-details")}
+            onClick={() => navigate(`/recipe-details/${recipe._id}`)}
           >
             <img
               src={ViewRecipeIcon}

@@ -91,3 +91,24 @@ export const getAllRecipes = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch community recipes" });
   }
 };
+
+// get recipe by id
+export const getRecipeById = async (req, res) => {
+  try {
+    const recipe = await Recipe.findById(req.params.id).populate(
+      "user",
+      "username"
+    );
+
+    if (!recipe) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Recipe not found  " });
+    }
+
+    res.status(200).json(recipe);
+  } catch (error) {
+    console.error("GET RECIPE BY ID ERROR:", error.message);
+    return res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
