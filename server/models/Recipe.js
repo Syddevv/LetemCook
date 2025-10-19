@@ -14,6 +14,7 @@ const recipeSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  category: { type: String, required: true },
 });
 
 export default mongoose.model("Recipe", recipeSchema);

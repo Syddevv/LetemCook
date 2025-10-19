@@ -24,7 +24,8 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
     servings: "",
     cookingTime: "",
     recipeImage: null,
-    likes: "",
+    likes: 0,
+    category: "Main Course",
   });
 
   const handleChange = (e) => {
@@ -46,7 +47,6 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
   const handleClear = () => {
     setImageFile(null);
     setImagePreview(null);
-    // manually clear the input using a ref
     fileInputRef.current.value = "";
   };
 
@@ -84,6 +84,7 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
         cookingTime: "",
         recipeImage: null,
         likes: "",
+        category: "",
       });
       setImageFile(null);
       setImagePreview(null);
@@ -188,6 +189,28 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
                         onChange={handleChange}
                         required
                       />
+                    </div>
+
+                    <div className="input-group">
+                      <label htmlFor="category">Category *</label>
+                      <select
+                        id="category"
+                        name="category"
+                        value={formData.category}
+                        className="category"
+                        onChange={handleChange}
+                      >
+                        <option value="main course">Main Course</option>
+                        <option value="side dish">Side Dish</option>
+                        <option value="dessert">Dessert</option>
+                        <option value="appetizer">Appetizer</option>
+                        <option value="salad">Salad</option>
+                        <option value="breakfast">Breakfast</option>
+                        <option value="soup">Soup</option>
+                        <option value="beverage">Beverage</option>
+                        <option value="snack">Snack</option>
+                        <option value="drink">Drink</option>
+                      </select>
                     </div>
                   </div>
                   <div className="input-row-3">

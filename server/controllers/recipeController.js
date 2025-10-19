@@ -17,6 +17,7 @@ export const addRecipe = async (req, res) => {
       ingredients,
       instructions,
       likes,
+      category,
     } = req.body;
     let imageUrl = null;
     if (req.file) {
@@ -36,6 +37,7 @@ export const addRecipe = async (req, res) => {
       likes,
       image: imageUrl,
       user: req.user._id,
+      category,
     });
 
     res.status(201).json({ success: true, recipe: newRecipe });
