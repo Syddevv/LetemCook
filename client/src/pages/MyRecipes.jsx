@@ -70,6 +70,7 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
 
   const fileInputRef = useRef();
 
+  // handle the submission of recipe
   const handleSubmit = async (e) => {
     e.preventDefault();
 

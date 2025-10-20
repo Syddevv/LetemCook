@@ -3,7 +3,7 @@ import {
   addRecipe,
   getUserRecipes,
   deleteRecipe,
-  getAllRecipes,
+  getRecipes,
   getRecipeById,
 } from "../controllers/recipeController.js";
 import { middleware } from "../middlewares/middleware.js";
@@ -15,7 +15,7 @@ const upload = multer({ dest: "uploads/" });
 router.post("/", middleware, upload.single("recipeImage"), addRecipe);
 router.get("/my-recipes", middleware, getUserRecipes);
 router.delete("/:id", middleware, deleteRecipe);
-router.get("/all", getAllRecipes);
-router.get("/:id", getRecipeById);
+router.get("/", getRecipes);
+router.get("/id/:id", getRecipeById);
 
 export default router;

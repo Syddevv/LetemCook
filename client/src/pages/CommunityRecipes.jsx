@@ -9,11 +9,13 @@ const CommunityRecipes = ({ collapsed, setCollapsed }) => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [recipes, setRecipes] = useState([]);
 
-  // Fetch community recipes from backend
+  // Fetch all community recipes from backend
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/recipes/all");
+        const res = await axios.get(
+          `http://localhost:5000/api/recipes?category=${selectedCategory}`
+        );
         setRecipes(res.data);
       } catch (err) {
         console.error("Error fetching recipes:", err);
@@ -21,7 +23,7 @@ const CommunityRecipes = ({ collapsed, setCollapsed }) => {
     };
 
     fetchRecipes();
-  }, []);
+  }, [selectedCategory]);
 
   useEffect(() => {
     const handleScroll = () => {

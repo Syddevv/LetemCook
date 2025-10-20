@@ -4,7 +4,7 @@ import User from "../models/User.js";
 import dotenv from "dotenv";
 dotenv.config();
 
-// Add new recipe
+// add new recipe
 export const addRecipe = async (req, res) => {
   try {
     const {
@@ -61,7 +61,7 @@ export const addRecipe = async (req, res) => {
   }
 };
 
-// Get all recipes by user
+// get all recipes by user
 export const getUserRecipes = async (req, res) => {
   try {
     const recipes = await Recipe.find({ user: req.user.id });
@@ -81,13 +81,25 @@ export const deleteRecipe = async (req, res) => {
   }
 };
 
-// get all recipes
-export const getAllRecipes = async (req, res) => {
+// get all recipes / recipes by category
+export const getRecipes = async (req, res) => {
   try {
-    const recipes = await Recipe.find().populate("user", "username"); // if you store user ID
+    const category = req.query.category;
+    let recipes;
+
+    if (!category || category === "all") {
+      recipes = await Recipe.find().populate("user", "username");
+    } else {
+      recipes = await Recipe.find({
+        category: {
+          $regex: new RegExp(`^${category}$`, "i"),
+        },
+      }).populate("user", "username");
+    }
+
     res.status(200).json(recipes);
   } catch (error) {
-    console.error("GET ALL RECIPES ERROR:", error);
+    console.error("ERROR FETCHING RECIPES:", error.message);
     res.status(500).json({ message: "Failed to fetch community recipes" });
   }
 };
@@ -103,7 +115,7 @@ export const getRecipeById = async (req, res) => {
     if (!recipe) {
       return res
         .status(404)
-        .json({ success: false, message: "Recipe not found  " });
+        .json({ success: false, message: "Recipe not found" });
     }
 
     res.status(200).json(recipe);
