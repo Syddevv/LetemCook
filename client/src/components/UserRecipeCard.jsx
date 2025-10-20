@@ -6,7 +6,7 @@ import Delete from "../assets/delete icon.png";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 
-const UserRecipeCard = ({ recipe }) => {
+const UserRecipeCard = ({ recipe, onDelete }) => {
   const navigate = useNavigate();
   const { user } = useAuth();
 
@@ -40,7 +40,10 @@ const UserRecipeCard = ({ recipe }) => {
         </div>
 
         <div className="recipe-buttons">
-          <button className="delete-recipe-btn">
+          <button
+            className="delete-recipe-btn"
+            onClick={() => onDelete(recipe._id)}
+          >
             <img src={Delete} alt="delete-icon" className="delete-icon" />
             Delete
           </button>

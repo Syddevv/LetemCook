@@ -74,9 +74,22 @@ export const getUserRecipes = async (req, res) => {
 // Delete recipe
 export const deleteRecipe = async (req, res) => {
   try {
-    await Recipe.findByIdAndDelete(req.params.id);
-    res.json({ message: "Recipe deleted" });
+    const recipe = await Recipe.findById(req.params.id);
+    if (!recipe) {
+      return res.status(404).json({ message: "Recipe not found" });
+    }
+
+    // delete the recipe
+    await recipe.deleteOne();
+
+    // decrementing total shared recipes by user
+    await User.findByIdAndUpdate(req.user._id, {
+      $inc: { recipesSharedTotal: -1 },
+      $push: { recipes: recipe._id },
+    });
+    res.json({ success: true, message: "Recipe deleted" });
   } catch (err) {
+    console.error("DELETE RECIPE ERROR:", err.message);
     res.status(500).json({ message: "Error deleting recipe" });
   }
 };

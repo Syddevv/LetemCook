@@ -93,7 +93,6 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
       });
 
       window.location.reload();
-
       alert("Recipe added successfully!");
 
       setFormData({
@@ -112,6 +111,29 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
     } catch (err) {
       console.error("UPLOAD ERROR:", err);
       alert("Failed to add recipe");
+    }
+  };
+
+  // handle deletion of recipe
+  const deleteRecipe = async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.delete(
+        `http://localhost:5000/api/recipes/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (res.data.success) {
+        setRecipes((prev) => prev.filter((recipe) => recipe._id !== id));
+        window.location.reload();
+        alert("Recipe deleted successfully");
+      }
+    } catch (err) {
+      console.log("Failed to delete recipe", err.message);
     }
   };
 
@@ -311,7 +333,11 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
             <div className="my-recipes">
               {recipes.length > 0 ? (
                 recipes.map((recipe) => (
-                  <UserRecipeCard key={recipe._id} recipe={recipe} />
+                  <UserRecipeCard
+                    key={recipe._id}
+                    recipe={recipe}
+                    onDelete={deleteRecipe}
+                  />
                 ))
               ) : (
                 <p>No recipes found.</p>
