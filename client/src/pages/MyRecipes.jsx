@@ -17,7 +17,7 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
     instructions: "",
     servings: "",
     cookingTime: "",
-    recipeImage: null,
+    image: null,
     likes: 0,
     category: "Main Course",
   });
@@ -76,11 +76,11 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
 
     const data = new FormData();
     Object.keys(formData).forEach((key) => {
-      if (key !== "recipeImage") data.append(key, formData[key]);
+      if (key !== "image") data.append(key, formData[key]);
     });
 
     if (imageFile) {
-      data.append("recipeImage", imageFile);
+      data.append("image", imageFile);
     }
 
     try {
@@ -292,6 +292,7 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
                                 width: "150px",
                                 height: "150px",
                                 objectFit: "cover",
+                                borderRadius: "4px",
                               }}
                             />
                             <button onClick={handleClear}>Remove</button>

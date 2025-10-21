@@ -137,3 +137,55 @@ export const getRecipeById = async (req, res) => {
     return res.status(500).json({ success: false, message: "Server Error" });
   }
 };
+
+// edit recipe
+
+export const editRecipe = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      title,
+      description,
+      ingredients,
+      instructions,
+      servings,
+      cookingTime,
+      category,
+    } = req.body;
+
+    const recipe = await Recipe.findById(id);
+    if (!recipe) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Recipe not found" });
+    }
+
+    let imageUrl = recipe.image;
+    if (req.file) {
+      const uploadResponse = await cloudinary.uploader.upload(req.file.path, {
+        folder: "recipes",
+      });
+      imageUrl = uploadResponse.secure_url;
+    }
+
+    recipe.title = title || recipe.title;
+    recipe.description = description || recipe.description;
+    recipe.ingredients = ingredients || recipe.ingredients;
+    recipe.instructions = instructions || recipe.instructions;
+    recipe.servings = servings || recipe.servings;
+    recipe.cookingTime = cookingTime || recipe.cookingTime;
+    recipe.category = category || recipe.category;
+    recipe.image = imageUrl;
+
+    await recipe.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Recipe updated successfully",
+      recipe,
+    });
+  } catch (error) {
+    console.error("EDIT RECIPE ERROR:", error.message);
+    return res.status(500).json({ success: false, message: "Server Error" });
+  }
+};

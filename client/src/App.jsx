@@ -73,7 +73,7 @@ function App() {
             }
           />
           <Route
-            path="/edit-recipe"
+            path="/edit-recipe/:id"
             element={
               <EditRecipe collapsed={collapsed} setCollapsed={setCollapsed} />
             }

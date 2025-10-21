@@ -50,7 +50,7 @@ const UserRecipeCard = ({ recipe, onDelete }) => {
 
           <button
             className="edit-recipe-btn"
-            onClick={() => navigate("/edit-recipe")}
+            onClick={() => navigate(`/edit-recipe/${recipe._id}`)}
           >
             <img src={Edit} alt="edit-icon" className="edit-icon" />
             Edit
