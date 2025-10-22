@@ -6,6 +6,8 @@ import {
   getRecipes,
   getRecipeById,
   editRecipe,
+  toggleLikeRecipe,
+  checkLikeStatus,
 } from "../controllers/recipeController.js";
 import { middleware } from "../middlewares/middleware.js";
 import multer from "multer";
@@ -19,5 +21,6 @@ router.delete("/:id", middleware, deleteRecipe);
 router.get("/", getRecipes);
 router.get("/id/:id", getRecipeById);
 router.put("/:id", upload.single("image"), editRecipe);
-
+router.put("/:id/like", middleware, toggleLikeRecipe);
+router.get("/:id/check-like", middleware, checkLikeStatus);
 export default router;

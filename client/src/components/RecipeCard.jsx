@@ -5,12 +5,61 @@ import ServingIcon from "../assets/Serving Icon.png";
 import Clock from "../assets/clock.png";
 import ViewRecipeIcon from "../assets/link.png";
 import "../styles/RecipeCard.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const RecipeCard = ({ recipe }) => {
   const [liked, setLiked] = useState(false);
+  const [likes, setLikes] = useState(recipe.likes);
   const navigate = useNavigate();
+
+  const handleLike = async (recipeId) => {
+    try {
+      const res = await fetch(
+        `http://localhost:5000/api/recipes/${recipeId}/like`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      const data = await res.json();
+
+      if (data.success) {
+        setLiked(data.liked);
+        setLikes((prev) => (data.liked ? prev + 1 : prev - 1));
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
+  useEffect(() => {
+    const checkLikeStatus = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        const response = await fetch(
+          `http://localhost:5000/api/recipes/${recipe._id}/check-like`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = await response.json();
+        setLiked(data.liked);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+
+    checkLikeStatus();
+  }, [recipe._id]);
 
   return (
     <div className="recipes">
@@ -27,9 +76,9 @@ const RecipeCard = ({ recipe }) => {
               src={liked ? Heart : LikeRecipe}
               alt="Like"
               className="like-icon"
-              onClick={() => (liked ? setLiked(false) : setLiked(true))}
+              onClick={() => handleLike(recipe._id)}
             />
-            <span>{recipe.likes}</span>
+            <span>{likes}</span>
           </div>
         </div>
 

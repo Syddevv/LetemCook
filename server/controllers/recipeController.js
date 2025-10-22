@@ -65,7 +65,22 @@ export const addRecipe = async (req, res) => {
 export const getUserRecipes = async (req, res) => {
   try {
     const recipes = await Recipe.find({ user: req.user.id });
-    res.json(recipes);
+    const userId = req.user ? req.user._id : null;
+
+    // If user is logged in, get their liked recipes
+    let likedRecipes = [];
+    if (userId) {
+      const user = await User.findById(userId).select("likedRecipes");
+      likedRecipes = user?.likedRecipes?.map((id) => id.toString()) || [];
+    }
+
+    // Add `liked` property to each recipe
+    const recipesWithLikeStatus = recipes.map((recipe) => ({
+      ...recipe.toObject(),
+      liked: likedRecipes.includes(recipe._id.toString()),
+    }));
+
+    res.status(200).json(recipesWithLikeStatus);
   } catch (err) {
     res.status(500).json({ message: "Error fetching user recipes" });
   }
@@ -110,7 +125,7 @@ export const getRecipes = async (req, res) => {
       }).populate("user", "username");
     }
 
-    res.status(200).json(recipes);
+    res.json(recipes);
   } catch (error) {
     console.error("ERROR FETCHING RECIPES:", error.message);
     res.status(500).json({ message: "Failed to fetch community recipes" });
@@ -187,5 +202,61 @@ export const editRecipe = async (req, res) => {
   } catch (error) {
     console.error("EDIT RECIPE ERROR:", error.message);
     return res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+// like recipe function
+
+export const toggleLikeRecipe = async (req, res) => {
+  try {
+    const recipeId = req.params.id;
+    const userId = req.user._id;
+
+    const user = await User.findById(userId);
+    const recipe = await Recipe.findById(recipeId);
+
+    if (!recipe) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Recipe not found" });
+    }
+
+    const alreadyLiked = user.likedRecipes.includes(recipeId);
+
+    if (alreadyLiked) {
+      // unlike
+      await Recipe.findByIdAndUpdate(recipeId, { $inc: { likes: -1 } });
+      await User.findByIdAndUpdate(userId, {
+        $pull: { likedRecipes: recipeId },
+      });
+
+      return res.json({ success: true, liked: false });
+    } else {
+      // like
+      await Recipe.findByIdAndUpdate(recipeId, { $inc: { likes: 1 } });
+      await User.findByIdAndUpdate(userId, {
+        $push: { likedRecipes: recipeId },
+      });
+
+      return res.json({ success: true, liked: true });
+    }
+  } catch (error) {
+    console.error("LIKE ERROR:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+export const checkLikeStatus = async (req, res) => {
+  try {
+    const recipeId = req.params.id;
+    const userId = req.user._id;
+
+    const user = await User.findById(userId);
+    const isLiked = user.likedRecipes.includes(recipeId);
+
+    res.json({ liked: isLiked });
+  } catch (error) {
+    console.error("CHECK LIKE STATUS ERROR:", error);
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
