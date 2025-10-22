@@ -1,10 +1,14 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import RecipeCard from "../components/RecipeCard";
 import Logo from "../assets/Logo.png";
+import axios from "axios";
+import { useAuth } from "../context/authContext";
 
 const LikedRecipes = ({ collapsed, setCollapsed }) => {
   const navRef = useRef(null);
+  const [likedRecipes, setLikedRecipes] = useState([]);
+  const { user } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,6 +20,27 @@ const LikedRecipes = ({ collapsed, setCollapsed }) => {
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const fetchLikedRecipes = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.get(
+        "http://localhost:5000/api/recipes/liked-recipes",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setLikedRecipes(res.data);
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchLikedRecipes();
   }, []);
 
   return (
@@ -48,6 +73,28 @@ const LikedRecipes = ({ collapsed, setCollapsed }) => {
           <div className="recipes-header-2">
             <h1>Liked Recipes</h1>
             <p>Your favorite recipes collection</p>
+            {user && <p>{user.recipesLikedTotal} liked recipes.</p>}
+          </div>
+
+          <div
+            className="liked-recipes"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
+              gap: "15px",
+            }}
+          >
+            {likedRecipes.length > 0 ? (
+              likedRecipes.map((recipe) => (
+                <RecipeCard
+                  key={recipe._id}
+                  recipe={recipe}
+                  onLikeUpdate={fetchLikedRecipes()}
+                />
+              ))
+            ) : (
+              <p className="no-recipes">No liked recipes yet</p>
+            )}
           </div>
         </div>
       </div>

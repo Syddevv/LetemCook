@@ -154,7 +154,6 @@ export const getRecipeById = async (req, res) => {
 };
 
 // edit recipe
-
 export const editRecipe = async (req, res) => {
   try {
     const { id } = req.params;
@@ -206,7 +205,6 @@ export const editRecipe = async (req, res) => {
 };
 
 // like recipe function
-
 export const toggleLikeRecipe = async (req, res) => {
   try {
     const recipeId = req.params.id;
@@ -228,6 +226,7 @@ export const toggleLikeRecipe = async (req, res) => {
       await Recipe.findByIdAndUpdate(recipeId, { $inc: { likes: -1 } });
       await User.findByIdAndUpdate(userId, {
         $pull: { likedRecipes: recipeId },
+        $inc: { recipesLikedTotal: -1 },
       });
 
       return res.json({ success: true, liked: false });
@@ -236,6 +235,7 @@ export const toggleLikeRecipe = async (req, res) => {
       await Recipe.findByIdAndUpdate(recipeId, { $inc: { likes: 1 } });
       await User.findByIdAndUpdate(userId, {
         $push: { likedRecipes: recipeId },
+        $inc: { recipesLikedTotal: 1 },
       });
 
       return res.json({ success: true, liked: true });
@@ -246,6 +246,7 @@ export const toggleLikeRecipe = async (req, res) => {
   }
 };
 
+// checking like status
 export const checkLikeStatus = async (req, res) => {
   try {
     const recipeId = req.params.id;
@@ -258,5 +259,33 @@ export const checkLikeStatus = async (req, res) => {
   } catch (error) {
     console.error("CHECK LIKE STATUS ERROR:", error);
     res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// fetching liked recipes
+export const getLikedRecipes = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const user = await User.findById(userId).populate({
+      path: "likedRecipes",
+      populate: {
+        path: "user",
+        select: "username",
+      },
+    });
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    const likedRecipes = user.likedRecipes;
+    res.status(200).json(likedRecipes);
+  } catch (error) {
+    console.error("GET LIKED RECIPES ERROR:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Error fetching liked recipes" });
   }
 };

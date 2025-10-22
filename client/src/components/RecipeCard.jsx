@@ -8,7 +8,7 @@ import "../styles/RecipeCard.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const RecipeCard = ({ recipe }) => {
+const RecipeCard = ({ recipe, onLikeUpdate }) => {
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(recipe.likes);
   const navigate = useNavigate();
@@ -31,6 +31,7 @@ const RecipeCard = ({ recipe }) => {
       if (data.success) {
         setLiked(data.liked);
         setLikes((prev) => (data.liked ? prev + 1 : prev - 1));
+        onLikeUpdate();
       }
     } catch (err) {
       console.log(err.message);
