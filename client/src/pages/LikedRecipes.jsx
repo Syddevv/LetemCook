@@ -89,7 +89,7 @@ const LikedRecipes = ({ collapsed, setCollapsed }) => {
                 <RecipeCard
                   key={recipe._id}
                   recipe={recipe}
-                  onLikeUpdate={fetchLikedRecipes()}
+                  onLikeUpdate={fetchLikedRecipes}
                 />
               ))
             ) : (
