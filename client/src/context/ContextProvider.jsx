@@ -34,8 +34,31 @@ const ContextProvider = ({ children }) => {
     setUser(null);
   };
 
+  const refreshUserProfile = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await fetch("http://localhost:5000/api/auth/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+
+      if (data) {
+        setUser(data);
+      }
+    } catch (err) {
+      console.error("Error refreshing user profile:", err);
+    }
+  };
+
+  useEffect(() => {
+    refreshUserProfile();
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, refreshUserProfile }}>
       {children}
     </AuthContext.Provider>
   );

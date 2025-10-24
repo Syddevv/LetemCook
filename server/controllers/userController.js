@@ -2,6 +2,7 @@ import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import Recipe from "../models/Recipe.js";
 
 dotenv.config();
 
@@ -91,4 +92,29 @@ export const loginUser = async (req, res) => {
 
 export const verifyUser = async (req, res) => {
   return res.status(200).json({ success: true, user: req.user });
+};
+
+export const getProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const user = await User.findById(userId).select("-password");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Count totals
+    const recipesSharedTotal = await Recipe.countDocuments({ user: userId });
+    const recipesLikedTotal = user.likedRecipes?.length || 0;
+
+    res.status(200).json({
+      ...user.toObject(),
+      recipesSharedTotal,
+      recipesLikedTotal,
+    });
+  } catch (err) {
+    console.error("Error fetching profile:", err);
+    res.status(500).json({ message: "Server error" });
+  }
 };

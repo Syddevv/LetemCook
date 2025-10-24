@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Logo from "../assets/Logo.png";
 import "../styles/Profile.css";
@@ -13,7 +13,11 @@ import { useAuth } from "../context/authContext";
 
 const Profile = ({ collapsed, setCollapsed }) => {
   const navRef = useRef(null);
-  const { user } = useAuth();
+  const { user, refreshUserProfile } = useAuth();
+
+  useEffect(() => {
+    refreshUserProfile();
+  });
 
   return (
     <div className="page-wrapper">
@@ -96,7 +100,7 @@ const Profile = ({ collapsed, setCollapsed }) => {
                   {user && <h3>{user.recipesLikedTotal}</h3>}
                   <p>Recipes Liked</p>
                   <img
-                    src={RecipesLiked}
+                    src={RecipesLiked || 0}
                     alt="recipes-liked-icon"
                     className="icon"
                   />
