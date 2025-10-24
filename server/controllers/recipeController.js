@@ -213,13 +213,14 @@ export const toggleLikeRecipe = async (req, res) => {
     const user = await User.findById(userId);
     const recipe = await Recipe.findById(recipeId);
 
+    const recipeOwnerId = recipe.user.toString();
+    const alreadyLiked = user.likedRecipes.includes(recipeId);
+
     if (!recipe) {
       return res
         .status(404)
         .json({ success: false, message: "Recipe not found" });
     }
-
-    const alreadyLiked = user.likedRecipes.includes(recipeId);
 
     if (alreadyLiked) {
       // unlike
@@ -227,6 +228,9 @@ export const toggleLikeRecipe = async (req, res) => {
       await User.findByIdAndUpdate(userId, {
         $pull: { likedRecipes: recipeId },
         $inc: { recipesLikedTotal: -1 },
+      });
+      await User.findByIdAndUpdate(recipeOwnerId, {
+        $inc: { totalLikes: -1 },
       });
 
       return res.json({ success: true, liked: false });
@@ -236,6 +240,9 @@ export const toggleLikeRecipe = async (req, res) => {
       await User.findByIdAndUpdate(userId, {
         $push: { likedRecipes: recipeId },
         $inc: { recipesLikedTotal: 1 },
+      });
+      await User.findByIdAndUpdate(recipeOwnerId, {
+        $inc: { totalLikes: 1 },
       });
 
       return res.json({ success: true, liked: true });
