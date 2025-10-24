@@ -80,7 +80,7 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
     });
 
     if (imageFile) {
-      data.append("image", imageFile);
+      data.append("recipeImage", imageFile);
     }
 
     try {
