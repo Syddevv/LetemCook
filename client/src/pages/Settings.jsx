@@ -1,37 +1,107 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Logo from "../assets/Logo.png";
 import AccountIcon from "../assets/Account Settings.png";
 import LockIcon from "../assets/Update Password.png";
-import ProfilePic from "../assets/syd-ig-profile.jpg";
 import AppInfo from "../assets/App Information.png";
 import "../styles/Settings.css";
 import { useAuth } from "../context/authContext";
 import DefaultPic from "../assets/default profile.png";
+import axios from "axios";
 
 const Settings = ({ collapsed, setCollapsed }) => {
-  const [cookingTitle, setCookingTitle] = useState("Home Cook");
-  const fileInputRef = useRef(null);
+  const fileInputRef = useRef();
   const { user } = useAuth();
+  const [imagePreview, setImagePreview] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    cookingTitle: "",
+    userBio: "",
+    profilePicture: null,
+  });
 
   const handleAccountChanges = (e) => {
     e.preventDefault();
+    try {
+      const { name, value, files } = e.target;
+      setFormData({
+        ...formData,
+        [name]: files ? files[0] : value,
+      });
+    } catch (err) {
+      console.err(err.message);
+    }
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file)); // for preview
+    }
   };
 
   const handleChangePassword = (e) => {
     e.preventDefault();
   };
 
-  const handleButtonClick = () => {
-    fileInputRef.current.click();
-  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const data = new FormData();
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      console.log("Selected file:", file);
+    Object.keys(formData).forEach((key) => {
+      if (formData[key]) {
+        data.append(key, formData[key]);
+      }
+    });
+
+    if (imageFile) {
+      data.append("profilePicture", imageFile);
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+      await axios.put(`http://localhost:5000/api/auth/${user._id}`, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      alert("Profile updated successfully!");
+      refreshPage();
+      setImageFile(null);
+      setImagePreview(null);
+      setFormData({
+        username: "",
+        email: "",
+        cookingTitle: "",
+        userBio: "",
+        profilePicture: null,
+      });
+    } catch (err) {
+      console.error(err.message);
     }
   };
+
+  const refreshPage = () => {
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  };
+
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        username: user.username || "",
+        email: user.email || "",
+        cookingTitle: user.cookingTitle || "",
+        userBio: user.userBio || "",
+        profilePicture: user.profilePicture || null,
+      });
+    }
+  }, [user]);
 
   return (
     <div className="page-wrapper">
@@ -75,34 +145,30 @@ const Settings = ({ collapsed, setCollapsed }) => {
                 <div className="account-settings-contents">
                   {user && (
                     <img
-                      src={
-                        user.profilePicture ? user.profilePicture : DefaultPic
-                      }
+                      src={imagePreview || user?.profilePicture || DefaultPic}
                       alt="profile-picture"
+                      style={{ marginBottom: "10px" }}
                     />
                   )}
 
-                  <div>
-                    <button
-                      className="update-photo-button"
-                      type="button"
-                      onClick={handleButtonClick}
-                    >
-                      Change Photo
-                    </button>
-
-                    {/* Hidden file input */}
+                  <div className="fileUploadWrapper">
                     <input
                       type="file"
+                      id="profilePicture"
                       accept="image/*"
-                      ref={fileInputRef}
-                      style={{ display: "none" }}
                       onChange={handleFileChange}
+                      style={{ display: "none" }}
                     />
+                    <label
+                      htmlFor="profilePicture"
+                      className="update-photo-button"
+                    >
+                      Update Picture
+                    </label>
                   </div>
 
                   <form
-                    onSubmit={handleAccountChanges}
+                    onSubmit={handleSubmit}
                     className="account-settings-input"
                   >
                     <div>
@@ -111,8 +177,8 @@ const Settings = ({ collapsed, setCollapsed }) => {
                         type="text"
                         id="username"
                         name="username"
-                        placeholder={user ? `@${user.username}` : ""}
-                        required
+                        value={formData.username}
+                        onChange={handleAccountChanges}
                       />
                     </div>
 
@@ -122,8 +188,8 @@ const Settings = ({ collapsed, setCollapsed }) => {
                         type="email"
                         id="email"
                         name="email"
-                        placeholder={user ? `${user.email}` : ""}
-                        required
+                        value={formData.email}
+                        onChange={handleAccountChanges}
                       />
                     </div>
 
@@ -131,9 +197,9 @@ const Settings = ({ collapsed, setCollapsed }) => {
                       <label htmlFor="cooking-title">Cooking Title</label>
                       <select
                         className="cooking-title"
-                        id="cooking-title"
-                        value={cookingTitle}
-                        onChange={(e) => setCookingTitle(e.target.value)}
+                        name="cookingTitle"
+                        value={formData.cookingTitle}
+                        onChange={handleAccountChanges}
                       >
                         <option value="Home Cook">Home Cook</option>
                         <option value="Recipe Enthusiast">
@@ -162,6 +228,9 @@ const Settings = ({ collapsed, setCollapsed }) => {
                             ? `${user.userBio}`
                             : "Tell us your cooking journey"
                         }
+                        name="userBio"
+                        onChange={handleAccountChanges}
+                        value={formData.userBio}
                       ></textarea>
                     </div>
 

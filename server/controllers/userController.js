@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import Recipe from "../models/Recipe.js";
+import { cloudinary } from "../utils/cloudinary.js";
 
 dotenv.config();
 
@@ -116,5 +117,41 @@ export const getProfile = async (req, res) => {
   } catch (err) {
     console.error("Error fetching profile:", err);
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const updateProfile = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { username, email, userBio, cookingTitle } = req.body;
+
+    const user = await User.findById(id);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    let imageUrl = user.profilePicture;
+    if (req.file) {
+      const uploadResponse = await cloudinary.uploader.upload(req.file.path, {
+        folder: "user",
+      });
+      imageUrl = uploadResponse.secure_url;
+    }
+
+    user.username = username || user.username;
+    user.email = email || user.email;
+    user.userBio = userBio || user.userBio;
+    user.cookingTitle = cookingTitle || user.cookingTitle;
+    user.profilePicture = imageUrl;
+
+    await user.save();
+    return res
+      .status(200)
+      .json({ success: true, message: "Profile updated successfully" });
+  } catch (error) {
+    console.error("ERROR UPDATING PROFILE", error.message);
+    return res.status(500).json({ success: false, message: "Server error" });
   }
 };
