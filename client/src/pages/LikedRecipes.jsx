@@ -8,7 +8,7 @@ import { useAuth } from "../context/authContext";
 const LikedRecipes = ({ collapsed, setCollapsed }) => {
   const navRef = useRef(null);
   const [likedRecipes, setLikedRecipes] = useState([]);
-  const { user } = useAuth();
+  const { user, refreshUserProfile } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,6 +33,7 @@ const LikedRecipes = ({ collapsed, setCollapsed }) => {
           },
         }
       );
+      refreshUserProfile();
       setLikedRecipes(res.data);
     } catch (err) {
       console.error(err.message);
