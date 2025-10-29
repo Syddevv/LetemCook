@@ -296,3 +296,19 @@ export const getLikedRecipes = async (req, res) => {
       .json({ success: false, message: "Error fetching liked recipes" });
   }
 };
+
+// fetching most liked recipe
+export const getMostLikedRecipe = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const recipe = await Recipe.findOne({ user: userId })
+      .sort({ likes: -1 })
+      .limit(1);
+
+    res.status(200).json(recipe);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "Error fetching most liked recipe" });
+  }
+};

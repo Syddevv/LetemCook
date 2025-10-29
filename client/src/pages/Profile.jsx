@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Logo from "../assets/Logo.png";
 import "../styles/Profile.css";
@@ -10,14 +10,37 @@ import RecipesShared from "../assets/Recipes Shared.png";
 import MacAndCheese from "../assets/mac & cheese.jpg";
 import StreakIcon from "../assets/Cooking Streak.png";
 import { useAuth } from "../context/authContext";
+import axios from "axios";
 
 const Profile = ({ collapsed, setCollapsed }) => {
   const navRef = useRef(null);
   const { user, refreshUserProfile } = useAuth();
+  const [mostLikedRecipe, setMostLikedRecipe] = useState(null);
+
+  const fetchMostLikedRecipe = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.get(
+        "http://localhost:5000/api/recipes/most-liked",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setMostLikedRecipe(res.data.recipe || res.data);
+    } catch (err) {
+      console.error("Error fetching most liked recipe:", err.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchMostLikedRecipe();
+  }, []);
 
   useEffect(() => {
     refreshUserProfile();
-  });
+  }, [refreshUserProfile]);
 
   return (
     <div className="page-wrapper">
@@ -124,17 +147,32 @@ const Profile = ({ collapsed, setCollapsed }) => {
                       alt="most-like-recipe-heart"
                       className="total-likes-icon"
                     />
-                    <p>14</p>
+                    <p>{mostLikedRecipe?.likes ?? 0}</p>
                   </div>
                 </div>
 
-                <div className="recipe-description">
-                  <img src={MacAndCheese} alt="recipe-img" />
-                  <p className="recipe-name">Mac and Cheese</p>
-                  <p className="recipe-details">
-                    Fresh tomatoes, mozzarella, and basil on a crispy...
-                  </p>
-                </div>
+                {mostLikedRecipe ? (
+                  <div className="recipe-description">
+                    <img
+                      src={mostLikedRecipe.image || DefaultPic}
+                      alt="recipe-img"
+                    />
+                    <p className="recipe-name">{mostLikedRecipe.title}</p>
+                    <p className="recipe-details">
+                      {mostLikedRecipe.description.length > 80
+                        ? mostLikedRecipe.description.slice(0, 70) + "..."
+                        : mostLikedRecipe.description}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="recipe-description empty">
+                    <img src={DefaultPic} alt="no-recipe" />
+                    <p className="recipe-name">No recipes yet</p>
+                    <p className="recipe-details">
+                      Share a recipe to see it here.
+                    </p>
+                  </div>
+                )}
               </div>
 
               <div className="cooking-streak">
