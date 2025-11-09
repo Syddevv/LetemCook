@@ -103,10 +103,11 @@
   flex-direction: column;
   background-color: #fff;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  max-width: 270px;
+  min-width: 280px;
   padding: 30px 20px;
   align-items: center;
   border-radius: 10px;
+  max-height: 380px;
 }
 
 .most-liked-recipe-header {
@@ -164,11 +165,16 @@
 /* COOKING STREAK */
 
 .cooking-streak {
-  max-width: 250px;
+  min-width: 250px;
+  min-height: 200px;
   background-color: #fff;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .cooking-streak img {
@@ -183,9 +189,10 @@
 .cooking-streak-content {
   display: flex;
   align-items: center;
+  justify-content: center;
   flex-direction: column;
   gap: 20px;
-  margin-top: 60px;
+  flex: 1;
 }
 
 .cooking-streak-content p {
@@ -205,4 +212,50 @@
 .cooking-streak:hover {
   transform: translateY(-6px) scale(1.03);
   box-shadow: 0 6px 18px rgba(249, 116, 80, 0.15);
+}
+
+/* No Recipe Display */
+
+.no-recipes {
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  color: #6b6b6b;
+  text-align: center;
+}
+
+.no-recipe-circle {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: rgba(255, 140, 85, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgba(255, 140, 85, 0.06);
+}
+
+.no-recipe-icon {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.06));
+  opacity: 0.75;
+  transition: opacity 150ms ease;
+}
+
+.no-recipes h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #3a3a3a;
+  font-weight: 600;
+}
+
+.no-recipes p {
+  margin: 0;
+  font-size: 14px;
+  color: #9b9b9b;
 }

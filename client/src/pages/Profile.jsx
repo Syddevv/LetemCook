@@ -10,6 +10,7 @@ import RecipesShared from "../assets/Recipes Shared.png";
 import MacAndCheese from "../assets/mac & cheese.jpg";
 import StreakIcon from "../assets/Cooking Streak.png";
 import { useAuth } from "../context/authContext";
+import RecipeLogo from "../assets/recipe-book.png";
 import axios from "axios";
 
 const Profile = ({ collapsed, setCollapsed }) => {
@@ -165,12 +166,16 @@ const Profile = ({ collapsed, setCollapsed }) => {
                     </p>
                   </div>
                 ) : (
-                  <div className="recipe-description empty">
-                    <img src={DefaultPic} alt="no-recipe" />
-                    <p className="recipe-name">No recipes yet</p>
-                    <p className="recipe-details">
-                      Share a recipe to see it here.
-                    </p>
+                  <div className="no-recipes">
+                    <div className="no-recipe-circle">
+                      <img
+                        src={RecipeLogo}
+                        alt="heart icon"
+                        className="no-recipe-icon"
+                      />
+                    </div>
+                    <h3>No recipes yet.</h3>
+                    <p>Share a recipe to see it here!</p>
                   </div>
                 )}
               </div>

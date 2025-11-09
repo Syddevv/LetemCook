@@ -3,7 +3,9 @@ import Sidebar from "../components/Sidebar";
 import RecipeCard from "../components/RecipeCard";
 import Logo from "../assets/Logo.png";
 import axios from "axios";
+import Heart from "../assets/Total Likes.png";
 import { useAuth } from "../context/authContext";
+import "../styles/LikedRecipes.css"; // added import
 
 const LikedRecipes = ({ collapsed, setCollapsed }) => {
   const navRef = useRef(null);
@@ -94,7 +96,17 @@ const LikedRecipes = ({ collapsed, setCollapsed }) => {
                 />
               ))
             ) : (
-              <p className="no-recipes">No liked recipes yet</p>
+              <div className="no-liked-recipes">
+                <div className="no-liked-circle">
+                  <img
+                    src={Heart}
+                    alt="heart icon"
+                    className="no-liked-heart"
+                  />
+                </div>
+                <h3>No liked recipes yet</h3>
+                <p>Start exploring and like recipes you love!</p>
+              </div>
             )}
           </div>
         </div>
