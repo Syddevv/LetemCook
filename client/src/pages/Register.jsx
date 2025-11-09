@@ -12,6 +12,8 @@ const RegistrationPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
+  const [displayError, setDisplayError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -19,21 +21,32 @@ const RegistrationPage = () => {
     e.preventDefault();
 
     if (password != confirmPass) {
-      console.log("Password must be the same.");
-    } else {
-      try {
-        const response = await axios.post(
-          "http://localhost:5000/api/auth/register",
-          { username, email, password }
-        );
+      setDisplayError("Password and Confirm password do not match.");
+      return;
+    }
 
-        if (response.data.success) {
-          console.log("User registered successfully");
-          navigate("/login");
-        }
-      } catch (error) {
-        console.error(error.message);
+    if (password.length < 8) {
+      setDisplayError("Password must be at least 8 characters.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/register",
+        { username, email, password }
+      );
+
+      if (response.data.success) {
+        console.log("User registered successfully");
+        navigate("/login");
       }
+    } catch (err) {
+      setDisplayError(
+        err.response?.data?.message || err.message || "Account creation failed"
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -112,8 +125,9 @@ const RegistrationPage = () => {
                 />
               </div>
 
+              {displayError && <p className="error">{displayError}</p>}
               <button className="sign-up-button" type="submit">
-                Sign Up
+                {loading ? "Creating account..." : "Sign Up"}
               </button>
             </form>
 
