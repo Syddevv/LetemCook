@@ -4,6 +4,7 @@ import Sidebar from "../components/Sidebar";
 import Logo from "../assets/Logo.png";
 import "../styles/MyRecipes.css";
 import UserRecipeCard from "../components/UserRecipeCard";
+import NoRecipeIcon from "../assets/no-category-recipe.png";
 import { useAuth } from "../context/authContext";
 
 const MyRecipe = ({ collapsed, setCollapsed }) => {
@@ -341,7 +342,17 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
                   />
                 ))
               ) : (
-                <p>No recipes found.</p>
+                <div className="no-user-recipes">
+                  <div className="no-recipe-circle">
+                    <img
+                      src={NoRecipeIcon}
+                      alt="heart icon"
+                      className="no-recipe-heart"
+                    />
+                  </div>
+                  <h3>No recipes yet</h3>
+                  <p>Upload recipes to view it here!</p>
+                </div>
               )}
             </div>
           </div>

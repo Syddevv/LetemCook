@@ -13,6 +13,8 @@
   margin-top: 32px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
   max-width: 80%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
 }
 
 .add-recipe-title {
@@ -149,8 +151,10 @@
 }
 
 .my-recipes {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 20px;
+  padding: 20px 0;
 }
 
 .my-recipes-header {
@@ -342,4 +346,53 @@
 .category:focus {
   border-color: #f97450;
   box-shadow: 0 0 0 2px rgba(249, 116, 80, 0.2);
+}
+
+/* No user recipes */
+
+.no-user-recipes {
+  grid-column: 1 / -1;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  color: #6b6b6b;
+  text-align: center;
+  margin: 0 auto;
+  padding: 40px 0;
+}
+
+.no-recipe-circle {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: rgba(255, 140, 85, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgba(255, 140, 85, 0.06);
+}
+
+.no-recipe-heart {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.06));
+  opacity: 0.75;
+  transition: opacity 150ms ease;
+}
+
+.no-user-recipes h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #3a3a3a;
+  font-weight: 600;
+}
+
+.no-user-recipes p {
+  margin: 0;
+  font-size: 14px;
+  color: #9b9b9b;
 }
