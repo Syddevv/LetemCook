@@ -2,11 +2,13 @@ import React, { useRef, useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Logo from "../assets/Logo.png";
 import RecipeCard from "../components/RecipeCard";
+import NoRecipeIcon from "../assets/no-category-recipe.png";
 import "../styles/Discover.css";
 
 const DiscoverRecipes = ({ collapsed, setCollapsed }) => {
   const navRef = useRef(null);
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [recipes, setRecipes] = useState([]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -72,7 +74,25 @@ const DiscoverRecipes = ({ collapsed, setCollapsed }) => {
             </select>
           </div>
 
-          <div className={`recipes ${collapsed ? "collapsed" : ""}`}></div>
+          <div className={`recipes ${collapsed ? "collapsed" : ""}`}>
+            {recipes.length > 0 ? (
+              recipes.map((recipe) => (
+                <RecipeCard key={recipe._id} recipe={recipe} />
+              ))
+            ) : (
+              <div className="no-liked-recipes">
+                <div className="no-liked-circle">
+                  <img
+                    src={NoRecipeIcon}
+                    alt="heart icon"
+                    className="no-liked-heart"
+                  />
+                </div>
+                <h3>No recipes yet</h3>
+                <p>Stay tune for more updates!</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

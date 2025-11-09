@@ -1,4 +1,3 @@
-import Pasta from "../assets/pasta.jpg";
 import LikeRecipe from "../assets/Like Recipe.png";
 import Heart from "../assets/love.png";
 import ServingIcon from "../assets/Serving Icon.png";
