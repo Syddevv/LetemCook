@@ -222,3 +222,9 @@
 .app-information-card-content button:hover {
   background-color: rgb(241, 241, 241);
 }
+
+.error {
+  text-align: center;
+  font-size: 12px;
+  color: rgb(255, 65, 65);
+}

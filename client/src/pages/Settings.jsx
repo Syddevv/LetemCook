@@ -21,6 +21,11 @@ const Settings = ({ collapsed, setCollapsed }) => {
     userBio: "",
     profilePicture: null,
   });
+  const [newPassword, setNewPassword] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleAccountChanges = (e) => {
     e.preventDefault();
@@ -39,12 +44,48 @@ const Settings = ({ collapsed, setCollapsed }) => {
     const file = e.target.files[0];
     if (file) {
       setImageFile(file);
-      setImagePreview(URL.createObjectURL(file)); // for preview
+      setImagePreview(URL.createObjectURL(file));
     }
   };
 
-  const handleChangePassword = (e) => {
+  const handleChangePassword = async (e) => {
     e.preventDefault();
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      setPasswordError("Please fill all fields.");
+      return;
+    }
+
+    if (newPassword.length < 8) {
+      setPasswordError("Password must be at least 8 characters long.");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setPasswordError("New password and confirm password do not match.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const token = localStorage.getItem("token");
+      await axios.put(
+        `http://localhost:5000/api/auth/${user._id}/password`,
+        { currentPassword, newPassword },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      alert("Password updated successfully");
+    } catch (err) {
+      setPasswordError(
+        err.response?.data?.message || err.message || "Password update failed"
+      );
+    } finally {
+      setLoading(false);
+      refreshPage();
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -260,6 +301,7 @@ const Settings = ({ collapsed, setCollapsed }) => {
                       id="current-password"
                       name="current-password"
                       placeholder="Your current password"
+                      onChange={(e) => setCurrentPassword(e.target.value)}
                       required
                     />
                   </div>
@@ -270,7 +312,8 @@ const Settings = ({ collapsed, setCollapsed }) => {
                       type="password"
                       id="new-password"
                       name="new-password"
-                      placeholder="Create current password"
+                      placeholder="Create new password"
+                      onChange={(e) => setNewPassword(e.target.value)}
                       required
                     />
                   </div>
@@ -282,12 +325,18 @@ const Settings = ({ collapsed, setCollapsed }) => {
                       id="confirm-password"
                       name="confirm-password"
                       placeholder="Confirm your new password"
+                      onChange={(e) => setConfirmPassword(e.target.value)}
                       required
                     />
                   </div>
 
-                  <button type="submit" className="save-password-button">
-                    Save Password
+                  {passwordError && <p className="error">{passwordError}</p>}
+                  <button
+                    type="submit"
+                    className="save-password-button"
+                    disabled={loading}
+                  >
+                    {loading ? "Saving..." : "Save Password"}
                   </button>
                 </form>
               </div>

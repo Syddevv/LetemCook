@@ -5,6 +5,7 @@ import {
   verifyUser,
   getProfile,
   updateProfile,
+  updatePassword,
 } from "../controllers/userController.js";
 import { middleware } from "../middlewares/middleware.js";
 import multer from "multer";
@@ -18,5 +19,6 @@ router.post("/login", loginUser);
 router.get("/verify", middleware, verifyUser);
 router.get("/profile", middleware, getProfile);
 router.put("/:id", middleware, upload.single("profilePicture"), updateProfile);
+router.put("/:id/password", middleware, updatePassword);
 
 export default router;
