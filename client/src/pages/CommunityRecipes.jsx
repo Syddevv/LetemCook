@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Logo from "../assets/Logo.png";
 import RecipeCard from "../components/RecipeCard";
+import NoRecipeIcon from "../assets/no-category-recipe.png";
 import axios from "axios";
 
 const CommunityRecipes = ({ collapsed, setCollapsed }) => {
@@ -95,7 +96,17 @@ const CommunityRecipes = ({ collapsed, setCollapsed }) => {
                 <RecipeCard key={recipe._id} recipe={recipe} />
               ))
             ) : (
-              <p>No recipes found.</p>
+              <div className="no-liked-recipes">
+                <div className="no-liked-circle">
+                  <img
+                    src={NoRecipeIcon}
+                    alt="heart icon"
+                    className="no-liked-heart"
+                  />
+                </div>
+                <h3>No {selectedCategory} recipes yet</h3>
+                <p>Try selecting a different category!</p>
+              </div>
             )}
           </div>
         </div>
