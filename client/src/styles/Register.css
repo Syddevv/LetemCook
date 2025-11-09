@@ -166,3 +166,9 @@ label {
 .link-to-login span:hover {
   text-decoration: underline;
 }
+
+.error {
+  text-align: center;
+  font-size: 12px;
+  color: rgb(255, 65, 65);
+}
