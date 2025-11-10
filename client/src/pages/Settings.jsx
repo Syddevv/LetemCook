@@ -10,6 +10,7 @@ import DefaultPic from "../assets/default profile.png";
 import axios from "axios";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import { motion } from "framer-motion";
 
 const Settings = ({ collapsed, setCollapsed }) => {
   const { user } = useAuth();
@@ -183,6 +184,11 @@ const Settings = ({ collapsed, setCollapsed }) => {
     }
   }, [user]);
 
+  const headerVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  };
+
   return (
     <div className="page-wrapper">
       <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
@@ -194,28 +200,46 @@ const Settings = ({ collapsed, setCollapsed }) => {
           transition: "margin-left 0.3s",
         }}
       >
-        <div
+        {/* HEADER */}
+        <motion.div
           className="header"
           style={{
             left: collapsed ? "70px" : "340px",
             right: 0,
             transition: "left 0.3s",
           }}
+          variants={headerVariants}
+          initial="hidden"
+          animate="visible"
         >
           <div className="logo-webName">
             <img src={Logo} alt="Logo" className="web-logo" />
             <p className="web-name">Let'em Cook</p>
           </div>
-        </div>
+        </motion.div>
 
         <div className="settings-cards">
-          <div className="settings-header">
+          <motion.div
+            className="profile-header"
+            variants={headerVariants}
+            initial="hidden"
+            animate="visible"
+          >
             <h1>Settings</h1>
             <p>Manage your account settings</p>
-          </div>
+          </motion.div>
 
           <div className="settings-grids">
-            <div className="settings-grid-1">
+            {/* Grid 1 - Account Settings */}
+            <motion.div
+              className="settings-grid-1"
+              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{
+                duration: 0.5,
+                ease: "easeOut",
+              }}
+            >
               <div className="account-settings-card">
                 <p className="account-settings-header">
                   <img src={AccountIcon} alt="account-icon" />
@@ -320,9 +344,19 @@ const Settings = ({ collapsed, setCollapsed }) => {
                   </form>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="settings-grid-2">
+            {/* Grid 2 - Password & App Info */}
+            <motion.div
+              className="settings-grid-2"
+              initial={{ opacity: 0, y: 40, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{
+                duration: 0.6,
+                delay: 0.15,
+                ease: "easeOut",
+              }}
+            >
               <div className="update-password-card">
                 <p className="update-password-card-header">
                   <img src={LockIcon} alt="lock-icon" />
@@ -338,7 +372,6 @@ const Settings = ({ collapsed, setCollapsed }) => {
                     <input
                       type="password"
                       id="current-password"
-                      name="current-password"
                       placeholder="Your current password"
                       onChange={(e) => setCurrentPassword(e.target.value)}
                       required
@@ -350,7 +383,6 @@ const Settings = ({ collapsed, setCollapsed }) => {
                     <input
                       type="password"
                       id="new-password"
-                      name="new-password"
                       placeholder="Create new password"
                       onChange={(e) => setNewPassword(e.target.value)}
                       required
@@ -362,7 +394,6 @@ const Settings = ({ collapsed, setCollapsed }) => {
                     <input
                       type="password"
                       id="confirm-password"
-                      name="confirm-password"
                       placeholder="Confirm your new password"
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       required
@@ -402,7 +433,7 @@ const Settings = ({ collapsed, setCollapsed }) => {
                   <button className="terms-of-service">Terms of Service</button>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>

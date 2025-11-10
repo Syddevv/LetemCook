@@ -8,6 +8,7 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import { motion } from "framer-motion";
 
 const EditRecipe = ({ collapsed, setCollapsed }) => {
   const navigate = useNavigate();
@@ -132,6 +133,18 @@ const EditRecipe = ({ collapsed, setCollapsed }) => {
     }
   }, [id]);
 
+  const fadePop = {
+    hidden: { opacity: 0, scale: 0.85 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.3,
+        ease: "easeOut",
+      },
+    },
+  };
+
   return (
     <div className="page-wrapper">
       <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
@@ -143,6 +156,7 @@ const EditRecipe = ({ collapsed, setCollapsed }) => {
           transition: "margin-left 0.3s",
         }}
       >
+        {/* HEADER */}
         <div
           className="header"
           style={{
@@ -166,7 +180,12 @@ const EditRecipe = ({ collapsed, setCollapsed }) => {
             Back
           </button>
 
-          <div className="add-new-recipe-card">
+          <motion.div
+            className="add-new-recipe-card"
+            variants={fadePop}
+            initial="hidden"
+            animate="visible"
+          >
             <form className="add-recipe-form-container" onSubmit={handleSubmit}>
               <h2 className="edit-recipe-title">
                 <img src={EditIcon} alt="edit-icon" /> Edit Recipe
@@ -302,7 +321,7 @@ const EditRecipe = ({ collapsed, setCollapsed }) => {
                 </div>
               </div>
             </form>
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>

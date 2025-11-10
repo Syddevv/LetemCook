@@ -8,6 +8,7 @@ import NoRecipeIcon from "../assets/no-category-recipe.png";
 import { useAuth } from "../context/authContext";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import { motion } from "framer-motion";
 
 const MyRecipe = ({ collapsed, setCollapsed }) => {
   const navRef = useRef(null);
@@ -184,6 +185,31 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const headerVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  };
+
+  const addCardVariants = {
+    hidden: { opacity: 0, scale: 0.95 },
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.4 } },
+  };
+
+  const userRecipeVariants = {
+    hidden: { opacity: 0, scale: 0.9, y: 20 },
+    visible: (i) => ({
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.1,
+        type: "spring",
+        stiffness: 300,
+        damping: 20,
+      },
+    }),
+  };
+
   return (
     <div className="page-wrapper">
       <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
@@ -211,12 +237,24 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
         </div>
 
         <div className="my-recipes-wrapper">
-          <div className="recipes-header-2">
+          {/* Header */}
+          <motion.div
+            className="recipes-header-2"
+            variants={headerVariants}
+            initial="hidden"
+            animate="visible"
+          >
             <h1>My Recipes</h1>
             <p>Create and manage your recipe collection</p>
-          </div>
+          </motion.div>
 
-          <div className="add-new-recipe-card">
+          {/* Add New Recipe Card */}
+          <motion.div
+            className="add-new-recipe-card"
+            variants={addCardVariants}
+            initial="hidden"
+            animate="visible"
+          >
             <form onSubmit={handleSubmit} className="add-recipe-form-container">
               <h2 className="add-recipe-title">+ Add New Recipe</h2>
               <div className="add-recipe-form">
@@ -359,21 +397,31 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
                 </div>
               </div>
             </form>
-          </div>
+          </motion.div>
 
+          {/* User Recipes */}
           <div className="my-recipes-box-wrapper">
-            <h2 className="my-recipes-header">
+            <motion.h2
+              className="my-recipes-header"
+              variants={headerVariants}
+              initial="hidden"
+              animate="visible"
+            >
               My Recipes ({user && user.recipesSharedTotal})
-            </h2>
+            </motion.h2>
 
             <div className="my-recipes">
               {recipes.length > 0 ? (
-                recipes.map((recipe) => (
-                  <UserRecipeCard
+                recipes.map((recipe, index) => (
+                  <motion.div
                     key={recipe._id}
-                    recipe={recipe}
-                    onDelete={deleteRecipe}
-                  />
+                    custom={index}
+                    initial="hidden"
+                    animate="visible"
+                    variants={userRecipeVariants}
+                  >
+                    <UserRecipeCard recipe={recipe} onDelete={deleteRecipe} />
+                  </motion.div>
                 ))
               ) : (
                 <div className="no-user-recipes">

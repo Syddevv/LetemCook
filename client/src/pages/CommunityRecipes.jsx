@@ -4,6 +4,7 @@ import Logo from "../assets/Logo.png";
 import RecipeCard from "../components/RecipeCard";
 import NoRecipeIcon from "../assets/no-category-recipe.png";
 import axios from "axios";
+import { motion } from "framer-motion";
 
 const CommunityRecipes = ({ collapsed, setCollapsed }) => {
   const navRef = useRef(null);
@@ -38,6 +39,26 @@ const CommunityRecipes = ({ collapsed, setCollapsed }) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const headerVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  };
+
+  const recipeCardVariants = {
+    hidden: { opacity: 0, scale: 0.9, y: 20 },
+    visible: (i) => ({
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.1,
+        type: "spring",
+        stiffness: 300,
+        damping: 20,
+      },
+    }),
+  };
+
   return (
     <div className="page-wrapper">
       <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
@@ -49,7 +70,8 @@ const CommunityRecipes = ({ collapsed, setCollapsed }) => {
           transition: "margin-left 0.3s",
         }}
       >
-        <div
+        {/* HEADER */}
+        <motion.div
           ref={navRef}
           className="header"
           style={{
@@ -57,15 +79,24 @@ const CommunityRecipes = ({ collapsed, setCollapsed }) => {
             right: 0,
             transition: "left 0.3s",
           }}
+          variants={headerVariants}
+          initial="hidden"
+          animate="visible"
         >
           <div className="logo-webName">
             <img src={Logo} alt="Logo" className="web-logo" />
             <p className="web-name">Let'em Cook</p>
           </div>
-        </div>
+        </motion.div>
 
+        {/* Recipes */}
         <div className="recipes-wrapper">
-          <div className="recipes-header">
+          <motion.div
+            className="recipes-header"
+            variants={headerVariants}
+            initial="hidden"
+            animate="visible"
+          >
             <div>
               <h1>Community Recipes</h1>
               <p>Explore delicious recipes from our community</p>
@@ -88,25 +119,39 @@ const CommunityRecipes = ({ collapsed, setCollapsed }) => {
               <option value="snack">Snack</option>
               <option value="drink">Drink</option>
             </select>
-          </div>
+          </motion.div>
 
+          {/* RECIPE CARD */}
           <div className={`recipes ${collapsed ? "collapsed" : ""}`}>
             {recipes.length > 0 ? (
-              recipes.map((recipe) => (
-                <RecipeCard key={recipe._id} recipe={recipe} />
+              recipes.map((recipe, index) => (
+                <motion.div
+                  key={recipe._id}
+                  custom={index}
+                  initial="hidden"
+                  animate="visible"
+                  variants={recipeCardVariants}
+                >
+                  <RecipeCard recipe={recipe} />
+                </motion.div>
               ))
             ) : (
-              <div className="no-liked-recipes">
+              <motion.div
+                className="no-liked-recipes"
+                initial="hidden"
+                animate="visible"
+                variants={recipeCardVariants}
+              >
                 <div className="no-liked-circle">
                   <img
                     src={NoRecipeIcon}
-                    alt="heart icon"
+                    alt="no recipes"
                     className="no-liked-heart"
                   />
                 </div>
                 <h3>No {selectedCategory} recipes yet</h3>
                 <p>Try selecting a different category!</p>
-              </div>
+              </motion.div>
             )}
           </div>
         </div>

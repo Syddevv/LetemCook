@@ -10,6 +10,7 @@ import NavBar from "../components/NavBar";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { motion } from "framer-motion";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -26,24 +27,77 @@ const LandingPage = () => {
         console.error(err.message);
       }
     };
-
     fetchFeaturedRecipes();
   }, []);
 
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.6 }}
+    >
       <NavBar />
-      <div className="hero">
+
+      {/* HERO SECTION */}
+      <motion.div
+        className="hero"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
         <div className="right-hero-section">
-          <h1>Share Your</h1>
-          <h1 className="gradient-text">Culinary</h1>
-          <h1>Creations</h1>
+          <motion.h1
+            initial={{ y: 30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            Share Your
+          </motion.h1>
+          <motion.h1
+            className="gradient-text"
+            initial={{ y: 30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            Culinary
+          </motion.h1>
+          <motion.h1
+            initial={{ y: 30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.4 }}
+          >
+            Creations
+          </motion.h1>
 
-          <p>Join a community of passionate home cooks. </p>
-          <p>Discover amazing recipes, share your masterpieces,</p>
-          <p>and let everyone cook together.</p>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6 }}
+          >
+            Join a community of passionate home cooks.
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.7 }}
+          >
+            Discover amazing recipes, share your masterpieces,
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8 }}
+          >
+            and let everyone cook together.
+          </motion.p>
 
-          <div className="hero-buttons">
+          <motion.div
+            className="hero-buttons"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 1 }}
+          >
             <button
               className="start-cooking-btn"
               onClick={() => navigate("/login")}
@@ -51,15 +105,26 @@ const LandingPage = () => {
               Start Cooking
               <img src={Arrow} alt="arrow" className="btn-arrow" />
             </button>
-          </div>
+          </motion.div>
         </div>
 
-        <div className="left-hero-section">
+        <motion.div
+          className="left-hero-section"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.5, duration: 0.8 }}
+        >
           <img src={Pasta} alt="Pasta" className="hero-poster" />
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
-      <div className="website-features">
+      {/* FEATURES SECTION */}
+      <motion.div
+        className="website-features"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.3 }}
+      >
         <div className="top-section">
           <h1>
             Everything You Need To <span>Cook & Share</span>
@@ -68,42 +133,47 @@ const LandingPage = () => {
         </div>
 
         <div className="features-wrapper">
-          <div className="feature-card">
-            <div className="feature-icon">
-              <img src={RecipeBook} alt="recipe-book" />
-            </div>
-
-            <h1 className="feature-title">Discover Recipes</h1>
-            <p className="feature-subtitle">
-              Browse thousands of recipes from professional chefs and food APIs
-            </p>
-          </div>
-
-          <div className="feature-card">
-            <div className="feature-icon">
-              <img src={Heart} alt="heart-icon" />
-            </div>
-
-            <h1 className="feature-title">Save Favorites</h1>
-            <p className="feature-subtitle">
-              Keep all the recipes you love in one place.
-            </p>
-          </div>
-
-          <div className="feature-card">
-            <div className="feature-icon">
-              <img src={Sharing} alt="sharing-icon" />
-            </div>
-
-            <h1 className="feature-title">Share Creations</h1>
-            <p className="feature-subtitle">
-              Upload your own recipes with photos and detailed instructions
-            </p>
-          </div>
+          {[
+            {
+              img: RecipeBook,
+              title: "Discover Recipes",
+              desc: "Browse thousands of recipes from professional chefs and food APIs",
+            },
+            {
+              img: Heart,
+              title: "Save Favorites",
+              desc: "Keep all the recipes you love in one place.",
+            },
+            {
+              img: Sharing,
+              title: "Share Creations",
+              desc: "Upload your own recipes with photos and detailed instructions",
+            },
+          ].map((feature, i) => (
+            <motion.div
+              key={i}
+              className="feature-card"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 + i * 0.2, duration: 0.6 }}
+            >
+              <div className="feature-icon">
+                <img src={feature.img} alt={feature.title} />
+              </div>
+              <h1 className="feature-title">{feature.title}</h1>
+              <p className="feature-subtitle">{feature.desc}</p>
+            </motion.div>
+          ))}
         </div>
-      </div>
+      </motion.div>
 
-      <div className="featured-recipes">
+      {/* FEATURED RECIPES */}
+      <motion.div
+        className="featured-recipes"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.4 }}
+      >
         <div className="featured-recipes-title">
           <h1>
             Featured <span className="gradient-text">Community Recipes</span>
@@ -113,8 +183,19 @@ const LandingPage = () => {
 
         <div className="recipe-cards-wrapper">
           {featuredRecipes && featuredRecipes.length > 0 ? (
-            featuredRecipes.map((recipe) => (
-              <div className="recipe-card" key={recipe._id}>
+            featuredRecipes.map((recipe, index) => (
+              <motion.div
+                key={recipe._id}
+                className="recipe-card"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{
+                  scale: 1.03,
+                  y: -8,
+                  transition: { duration: 0.15, ease: "easeOut" },
+                }}
+              >
                 <div className="like-count">
                   <img src={Heart} alt="heart" />
                   <p>{recipe.likes}</p>
@@ -130,7 +211,7 @@ const LandingPage = () => {
                   <div className="recipe-content">
                     <h3 className="recipe-title">{recipe.title}</h3>
                     <p className="recipe-owner">
-                      by
+                      by{" "}
                       <span style={{ fontWeight: "600" }}>
                         {recipe.user?.username}
                       </span>
@@ -154,15 +235,21 @@ const LandingPage = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))
           ) : (
             <p>There are no current featured recipes.</p>
           )}
         </div>
-      </div>
+      </motion.div>
 
-      <div className="bottom-hero">
+      {/* BOTTOM CTA */}
+      <motion.div
+        className="bottom-hero"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5, duration: 0.8 }}
+      >
         <h1>Ready to Start Your Culinary Journey?</h1>
         <p>
           Join thousands of home cooks sharing their passion for great food.
@@ -174,16 +261,21 @@ const LandingPage = () => {
         >
           Create Account
         </button>
-      </div>
+      </motion.div>
 
-      <footer>
+      {/* FOOTER */}
+      <motion.footer
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.8 }}
+      >
         <div className="footer-links">
           <p>© 2025 Let'em Cook. All rights reserved.</p>
           <p>Privacy</p>
           <p>Terms</p>
         </div>
-      </footer>
-    </div>
+      </motion.footer>
+    </motion.div>
   );
 };
 

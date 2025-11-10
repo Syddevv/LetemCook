@@ -7,11 +7,11 @@ import Calendar from "../assets/Member Since.png";
 import TotalLikes from "../assets/Total Likes.png";
 import RecipesLiked from "../assets/Recipes Liked.png";
 import RecipesShared from "../assets/Recipes Shared.png";
-import MacAndCheese from "../assets/mac & cheese.jpg";
 import StreakIcon from "../assets/Cooking Streak.png";
-import { useAuth } from "../context/authContext";
 import RecipeLogo from "../assets/recipe-book.png";
+import { useAuth } from "../context/authContext";
 import axios from "axios";
+import { motion } from "framer-motion";
 
 const Profile = ({ collapsed, setCollapsed }) => {
   const navRef = useRef(null);
@@ -24,9 +24,7 @@ const Profile = ({ collapsed, setCollapsed }) => {
       const res = await axios.get(
         "http://localhost:5000/api/recipes/most-liked",
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
       setMostLikedRecipe(res.data.recipe || res.data);
@@ -43,6 +41,26 @@ const Profile = ({ collapsed, setCollapsed }) => {
     refreshUserProfile();
   }, [refreshUserProfile]);
 
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20, scale: 0.95 },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        delay: i * 0.1,
+        type: "spring",
+        stiffness: 300,
+        damping: 20,
+      },
+    }),
+  };
+
+  const headerVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  };
+
   return (
     <div className="page-wrapper">
       <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
@@ -54,7 +72,8 @@ const Profile = ({ collapsed, setCollapsed }) => {
           transition: "margin-left 0.3s",
         }}
       >
-        <div
+        {/* HEADER */}
+        <motion.div
           ref={navRef}
           className="header"
           style={{
@@ -62,23 +81,38 @@ const Profile = ({ collapsed, setCollapsed }) => {
             right: 0,
             transition: "left 0.3s",
           }}
+          variants={headerVariants}
+          initial="hidden"
+          animate="visible"
         >
           <div className="logo-webName">
             <img src={Logo} alt="Logo" className="web-logo" />
             <p className="web-name">Let'em Cook</p>
           </div>
-        </div>
+        </motion.div>
 
         <div className="profile-container">
-          <div className="profile-header">
+          <motion.div
+            className="profile-header"
+            variants={headerVariants}
+            initial="hidden"
+            animate="visible"
+          >
             <h1>Profile</h1>
             <p>Your cooking journey and achievements</p>
-          </div>
+          </motion.div>
 
           <div className="profile-cards-wrapper">
             <div className="profile-grid-1">
               {/* Profile Info */}
-              <div className="profile-card profile-info">
+              <motion.div
+                className="profile-card profile-info"
+                custom={0}
+                initial="hidden"
+                animate="visible"
+                whileHover={{ scale: 1.05 }}
+                variants={cardVariants}
+              >
                 {user && (
                   <img
                     src={user.profilePicture ? user.profilePicture : DefaultPic}
@@ -87,59 +121,83 @@ const Profile = ({ collapsed, setCollapsed }) => {
                 )}
                 {user && <h3>@{user.username}</h3>}
                 {user && <p>{user.cookingTitle}</p>}
-
                 {user?.userBio ? (
                   <blockquote>{user.userBio}</blockquote>
                 ) : (
                   <blockquote>No bio</blockquote>
                 )}
-              </div>
+              </motion.div>
 
               {/* First row stats */}
               <div className="stats1">
-                <div className="profile-card">
-                  {user && <h3>{user.recipesSharedTotal}</h3>}
-                  <p>Recipes Shared</p>
-                  <img
-                    src={RecipesShared}
-                    alt="recipes-shared-icon"
-                    className="icon"
-                  />
-                </div>
-
-                <div className="profile-card">
-                  {user && <h3>{user.totalLikes}</h3>}
-                  <p>Total Likes</p>
-                  <img
-                    src={TotalLikes}
-                    alt="total-likes-icon"
-                    className="icon"
-                  />
-                </div>
+                {[
+                  {
+                    label: "Recipes Shared",
+                    value: user?.recipesSharedTotal,
+                    icon: RecipesShared,
+                  },
+                  {
+                    label: "Total Likes",
+                    value: user?.totalLikes,
+                    icon: TotalLikes,
+                  },
+                ].map((stat, index) => (
+                  <motion.div
+                    key={stat.label}
+                    className="profile-card"
+                    custom={index + 1}
+                    initial="hidden"
+                    animate="visible"
+                    whileHover={{ scale: 1.05, y: -5 }}
+                    variants={cardVariants}
+                  >
+                    <h3>{stat.value ?? 0}</h3>
+                    <p>{stat.label}</p>
+                    <img src={stat.icon} alt={stat.label} className="icon" />
+                  </motion.div>
+                ))}
               </div>
 
               {/* Second row stats */}
               <div className="stats2">
-                <div className="profile-card">
-                  {user && <h3>{user.recipesLikedTotal}</h3>}
-                  <p>Recipes Liked</p>
-                  <img
-                    src={RecipesLiked || 0}
-                    alt="recipes-liked-icon"
-                    className="icon"
-                  />
-                </div>
-
-                <div className="profile-card">
-                  <h3>{creationDate}</h3>
-                  <p>Member Since</p>
-                  <img src={Calendar} alt="calendar-icon" className="icon" />
-                </div>
+                {[
+                  {
+                    label: "Recipes Liked",
+                    value: user?.recipesLikedTotal,
+                    icon: RecipesLiked,
+                  },
+                  {
+                    label: "Member Since",
+                    value: creationDate,
+                    icon: Calendar,
+                  },
+                ].map((stat, index) => (
+                  <motion.div
+                    key={stat.label}
+                    className="profile-card"
+                    custom={index + 3}
+                    initial="hidden"
+                    animate="visible"
+                    whileHover={{ scale: 1.05, y: -5 }}
+                    variants={cardVariants}
+                  >
+                    <h3>{stat.value ?? 0}</h3>
+                    <p>{stat.label}</p>
+                    <img src={stat.icon} alt={stat.label} className="icon" />
+                  </motion.div>
+                ))}
               </div>
             </div>
 
             <div className="profile-grid-2">
-              <div className="most-liked-recipe">
+              <motion.div
+                className="most-liked-recipe"
+                custom={5}
+                initial="hidden"
+                animate="visible"
+                whileHover={{ scale: 1.03 }}
+                variants={cardVariants}
+              >
                 <div className="most-liked-recipe-header">
                   <p className="header-title">Most Liked Recipe</p>
                   <div className="likes-count">
@@ -178,9 +236,16 @@ const Profile = ({ collapsed, setCollapsed }) => {
                     <p>Share a recipe to see it here!</p>
                   </div>
                 )}
-              </div>
+              </motion.div>
 
-              <div className="cooking-streak">
+              <motion.div
+                className="cooking-streak"
+                custom={6}
+                initial="hidden"
+                animate="visible"
+                whileHover={{ scale: 1.03 }}
+                variants={cardVariants}
+              >
                 <p>Cooking Streak</p>
                 <div className="cooking-streak-content">
                   <img src={StreakIcon} alt="streak-icon" />
@@ -191,7 +256,7 @@ const Profile = ({ collapsed, setCollapsed }) => {
                     </p>
                   )}
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>

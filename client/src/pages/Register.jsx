@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { motion } from "framer-motion";
 
 const RegistrationPage = () => {
   const [username, setUsername] = useState("");
@@ -20,7 +21,7 @@ const RegistrationPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (password != confirmPass) {
+    if (password !== confirmPass) {
       setDisplayError("Password and Confirm password do not match.");
       return;
     }
@@ -38,7 +39,6 @@ const RegistrationPage = () => {
       );
 
       if (response.data.success) {
-        console.log("User registered successfully");
         navigate("/login");
       }
     } catch (err) {
@@ -51,13 +51,29 @@ const RegistrationPage = () => {
   };
 
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.6 }}
+    >
       <NavBar />
 
       <div className="registration-page">
         <div className="registration-wrapper">
-          <div className="left-section">
-            <div className="taglines-wrapper">
+          {/* LEFT SECTION */}
+          <motion.div
+            className="left-section"
+            initial={{ x: -50, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            <motion.div
+              className="taglines-wrapper"
+              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
               <h1 className="tagline">
                 Cooking <br />
                 is better together
@@ -66,25 +82,53 @@ const RegistrationPage = () => {
                 <hr className="sub-tag-hr" />
                 <p>Join the table</p>
               </div>
-            </div>
+            </motion.div>
 
-            <img className="poster" src={Poster} alt="Poster" />
+            <motion.img
+              className="poster"
+              src={Poster}
+              alt="Poster"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+            />
 
-            <div className="logo-name-registration">
+            <motion.div
+              className="logo-name-registration"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.6 }}
+            >
               <img src={Logo} alt="Logo" className="logo2" />
               <p className="website-name2">Let'em Cook</p>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           <hr className="partition" />
 
-          <div className="right-section">
-            <div className="title">
+          {/* RIGHT SECTION */}
+          <motion.div
+            className="right-section"
+            initial={{ x: 50, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            <motion.div
+              className="title"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
               <h1>Register</h1>
               <p>Please complete to create your account</p>
-            </div>
+            </motion.div>
 
-            <form onSubmit={handleSubmit}>
+            <motion.form
+              onSubmit={handleSubmit}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
               <div>
                 <label htmlFor="username">Username</label>
                 <input
@@ -126,21 +170,33 @@ const RegistrationPage = () => {
               </div>
 
               {displayError && <p className="error">{displayError}</p>}
-              <button className="sign-up-button" type="submit">
-                {loading ? "Creating account..." : "Sign Up"}
-              </button>
-            </form>
 
-            <p className="link-to-login">
+              <motion.button
+                className="sign-up-button"
+                type="submit"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ duration: 0.15 }}
+              >
+                {loading ? "Creating account..." : "Sign Up"}
+              </motion.button>
+            </motion.form>
+
+            <motion.p
+              className="link-to-login"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+            >
               Already have an account?{" "}
               <Link to="/login" style={{ textDecoration: "none" }}>
                 <span className="link">Login</span>
               </Link>
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

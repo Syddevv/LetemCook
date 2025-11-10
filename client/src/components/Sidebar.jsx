@@ -14,6 +14,7 @@ import { useAuth } from "../context/authContext.js";
 import DefaultPic from "../assets/default profile.png";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import { motion } from "framer-motion";
 
 const navItems = [
   { label: "Discover Recipes", icon: DiscoverIcon, route: "/discover" },
@@ -67,28 +68,64 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
               className="profile-pic"
             />
           )}
-
           {user && <p className="profile-username">@{user.username}</p>}
           {user && <p className="profile-bio">{user.cookingTitle}</p>}
         </div>
       )}
 
-      <ul className="navigations">
-        {navItems.map((item) => (
-          <li
+      {/* NAVIGATIONS */}
+      <motion.ul
+        className="navigations"
+        initial="hidden"
+        animate="visible"
+        variants={{
+          visible: {
+            transition: {
+              staggerChildren: 0.05,
+            },
+          },
+        }}
+      >
+        {navItems.map((item, index) => (
+          <motion.li
             key={item.label}
             className={location.pathname === item.route ? "active" : ""}
             onClick={() => navigate(item.route)}
+            variants={{
+              hidden: { x: -20, opacity: 0 },
+              visible: {
+                x: 0,
+                opacity: 1,
+                transition: { type: "spring", stiffness: 400, damping: 25 },
+              },
+            }}
+            whileHover={{ x: 5, scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
           >
             <img src={item.icon} alt={item.label} />
             {!collapsed && item.label}
-          </li>
+          </motion.li>
         ))}
-        <li className="logout" onClick={handleLogout}>
+
+        {/* LOG OUT */}
+        <motion.li
+          className="logout"
+          onClick={handleLogout}
+          variants={{
+            hidden: { x: -20, opacity: 0 },
+            visible: {
+              x: 0,
+              opacity: 1,
+              transition: { type: "spring", stiffness: 400, damping: 25 },
+            },
+          }}
+          whileHover={{ x: 5, scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
+        >
           <img src={LogoutIcon} alt="Logout" />
           {!collapsed && "Logout"}
-        </li>
-      </ul>
+        </motion.li>
+      </motion.ul>
     </aside>
   );
 };

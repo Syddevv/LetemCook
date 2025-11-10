@@ -3,11 +3,11 @@ import React, { useRef, useEffect, useState } from "react";
 import Logo from "../assets/Logo.png";
 import BackIcon from "../assets/back.png";
 import "../styles/RecipeDetails.css";
-import Pizza from "../assets/pizza.jpg";
 import Clock from "../assets/clock.png";
 import ServingIcon from "../assets/Serving Icon.png";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { motion } from "framer-motion";
 
 const RecipeDetails = ({ collapsed, setCollapsed }) => {
   const navRef = useRef(null);
@@ -35,9 +35,31 @@ const RecipeDetails = ({ collapsed, setCollapsed }) => {
     fetchRecipe();
   }, [id]);
 
+  const fadePop = {
+    hidden: { opacity: 0, scale: 0.85 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.3,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  const slideLeftToRight = {
+    hidden: { opacity: 0, x: -50 },
+    visible: (i) => ({
+      opacity: 1,
+      x: 0,
+      transition: { delay: i * 0.1, duration: 0.5, ease: "easeOut" },
+    }),
+  };
+
   return (
     <div className="page-wrapper">
       <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
+
       <div
         className="page-wrapper-content"
         style={{
@@ -45,7 +67,8 @@ const RecipeDetails = ({ collapsed, setCollapsed }) => {
           transition: "margin-left 0.3s",
         }}
       >
-        <div
+        {/* HEADER */}
+        <motion.div
           ref={navRef}
           className="header"
           style={{
@@ -53,12 +76,14 @@ const RecipeDetails = ({ collapsed, setCollapsed }) => {
             right: 0,
             transition: "left 0.3s",
           }}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0, transition: { duration: 0.5 } }}
         >
           <div className="logo-webName">
             <img src={Logo} alt="Logo" className="web-logo" />
             <p className="web-name">Let'em Cook</p>
           </div>
-        </div>
+        </motion.div>
 
         <div className="recipe-details-box">
           <button
@@ -70,11 +95,24 @@ const RecipeDetails = ({ collapsed, setCollapsed }) => {
           </button>
 
           <div className="col-1">
-            <div className="recipe-image-box">
+            {/* IMAGE */}
+            <motion.div
+              className="recipe-image-box"
+              variants={fadePop}
+              initial="hidden"
+              animate="visible"
+            >
               <img src={recipes.image} alt="recipe-image" />
-            </div>
+            </motion.div>
 
-            <div className="recipe-details-content">
+            {/* RECIPE INFO */}
+            <motion.div
+              className="recipe-details-content"
+              variants={fadePop}
+              initial="hidden"
+              animate="visible"
+              transition={{ delay: 0.2 }}
+            >
               <h1>{recipes.title}</h1>
               <p className="recipe-information">{recipes.description}</p>
 
@@ -98,23 +136,32 @@ const RecipeDetails = ({ collapsed, setCollapsed }) => {
               <p className="recipe-author">
                 Recipe by <strong>{recipes.user?.username}</strong>
               </p>
-            </div>
+            </motion.div>
           </div>
 
           <div className="col-2">
+            {/* INGREDIENTS */}
             <div className="ingredients-wrapper">
               <p className="ingredients-wrapper-title">Ingredients</p>
               {recipes.ingredients &&
                 recipes.ingredients.split(",").map((ingredient, index) => (
-                  <div key={index} className="ingredients-card">
+                  <motion.div
+                    key={index}
+                    className="ingredients-card"
+                    variants={slideLeftToRight}
+                    initial="hidden"
+                    animate="visible"
+                    custom={index}
+                  >
                     <p>
                       <span className="dot"></span>
                       {ingredient.trim()}
                     </p>
-                  </div>
+                  </motion.div>
                 ))}
             </div>
 
+            {/* INSTRUCTIONS */}
             <div className="instructions-wrapper">
               <p className="instructions-wrapper-title">Instructions</p>
               {recipes.instructions &&
@@ -122,10 +169,17 @@ const RecipeDetails = ({ collapsed, setCollapsed }) => {
                   .split(/\d+\.\s+/)
                   .filter((step) => step.trim() !== "")
                   .map((step, index) => (
-                    <div key={index} className="instructions-card">
+                    <motion.div
+                      key={index}
+                      className="instructions-card"
+                      variants={slideLeftToRight}
+                      initial="hidden"
+                      animate="visible"
+                      custom={index + 1}
+                    >
                       <p className="instructions-num">{index + 1}</p>
                       <p>{step.trim()}</p>
-                    </div>
+                    </motion.div>
                   ))}
             </div>
           </div>

@@ -5,7 +5,8 @@ import Logo from "../assets/Logo.png";
 import axios from "axios";
 import Heart from "../assets/Total Likes.png";
 import { useAuth } from "../context/authContext";
-import "../styles/LikedRecipes.css"; // added import
+import "../styles/LikedRecipes.css";
+import { motion } from "framer-motion";
 
 const LikedRecipes = ({ collapsed, setCollapsed }) => {
   const navRef = useRef(null);
@@ -46,6 +47,26 @@ const LikedRecipes = ({ collapsed, setCollapsed }) => {
     fetchLikedRecipes();
   }, []);
 
+  const recipeCardVariants = {
+    hidden: { opacity: 0, scale: 0.9, y: 20 },
+    visible: (i) => ({
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.1,
+        type: "spring",
+        stiffness: 300,
+        damping: 20,
+      },
+    }),
+  };
+
+  const headerVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  };
+
   return (
     <div className="page-wrapper">
       <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
@@ -57,7 +78,8 @@ const LikedRecipes = ({ collapsed, setCollapsed }) => {
           transition: "margin-left 0.3s",
         }}
       >
-        <div
+        {/* HEADER */}
+        <motion.div
           ref={navRef}
           className="header"
           style={{
@@ -65,20 +87,31 @@ const LikedRecipes = ({ collapsed, setCollapsed }) => {
             right: 0,
             transition: "left 0.3s",
           }}
+          variants={headerVariants}
+          initial="hidden"
+          animate="visible"
         >
           <div className="logo-webName">
             <img src={Logo} alt="Logo" className="web-logo" />
             <p className="web-name">Let'em Cook</p>
           </div>
-        </div>
+        </motion.div>
 
         <div className="recipes-wrapper">
-          <div className="recipes-header-2">
-            <h1>Liked Recipes</h1>
-            <p>Your favorite recipes collection</p>
-            {user && <p>{user.recipesLikedTotal} liked recipes.</p>}
-          </div>
+          <motion.div
+            className="recipes-header"
+            variants={headerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            <div>
+              <h1>Liked Recipes</h1>
+              <p>Your favorite recipes collection</p>
+              {user && <p>{user.recipesLikedTotal} liked recipes.</p>}
+            </div>
+          </motion.div>
 
+          {/* LIKED RECIPES */}
           <div
             className="liked-recipes"
             style={{
@@ -88,25 +121,38 @@ const LikedRecipes = ({ collapsed, setCollapsed }) => {
             }}
           >
             {likedRecipes.length > 0 ? (
-              likedRecipes.map((recipe) => (
-                <RecipeCard
+              likedRecipes.map((recipe, index) => (
+                <motion.div
                   key={recipe._id}
-                  recipe={recipe}
-                  onLikeUpdate={fetchLikedRecipes}
-                />
+                  custom={index}
+                  initial="hidden"
+                  animate="visible"
+                  whileHover={{ scale: 1.03, y: -5 }}
+                  variants={recipeCardVariants}
+                >
+                  <RecipeCard
+                    recipe={recipe}
+                    onLikeUpdate={fetchLikedRecipes}
+                  />
+                </motion.div>
               ))
             ) : (
-              <div className="no-liked-recipes">
+              <motion.div
+                className="no-liked-recipes"
+                initial="hidden"
+                animate="visible"
+                variants={recipeCardVariants}
+              >
                 <div className="no-liked-circle">
                   <img
                     src={Heart}
-                    alt="heart icon"
+                    alt="no recipes"
                     className="no-liked-heart"
                   />
                 </div>
                 <h3>No liked recipes yet</h3>
                 <p>Start exploring and like recipes you love!</p>
-              </div>
+              </motion.div>
             )}
           </div>
         </div>

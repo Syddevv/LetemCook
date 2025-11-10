@@ -4,6 +4,7 @@ import Logo from "../assets/Logo.png";
 import RecipeCard from "../components/RecipeCard";
 import NoRecipeIcon from "../assets/no-category-recipe.png";
 import "../styles/Discover.css";
+import { motion } from "framer-motion";
 
 const DiscoverRecipes = ({ collapsed, setCollapsed }) => {
   const navRef = useRef(null);
@@ -21,6 +22,21 @@ const DiscoverRecipes = ({ collapsed, setCollapsed }) => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const recipeCardVariants = {
+    hidden: { opacity: 0, scale: 0.9, y: 20 },
+    visible: (i) => ({
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.1,
+        type: "spring",
+        stiffness: 300,
+        damping: 20,
+      },
+    }),
+  };
 
   return (
     <div className="discover-wrapper">
@@ -80,17 +96,22 @@ const DiscoverRecipes = ({ collapsed, setCollapsed }) => {
                 <RecipeCard key={recipe._id} recipe={recipe} />
               ))
             ) : (
-              <div className="no-liked-recipes">
+              <motion.div
+                className="no-liked-recipes"
+                initial="hidden"
+                animate="visible"
+                variants={recipeCardVariants}
+              >
                 <div className="no-liked-circle">
                   <img
                     src={NoRecipeIcon}
-                    alt="heart icon"
+                    alt="no recipes"
                     className="no-liked-heart"
                   />
                 </div>
                 <h3>No recipes yet</h3>
                 <p>Stay tune for more updates!</p>
-              </div>
+              </motion.div>
             )}
           </div>
         </div>

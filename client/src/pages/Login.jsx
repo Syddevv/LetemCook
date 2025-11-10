@@ -7,6 +7,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/authContext";
+import { motion } from "framer-motion";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -46,8 +47,19 @@ const LoginPage = () => {
 
       <div className="login-page">
         <div className="login-wrapper">
-          <div className="left-section">
-            <div className="taglines-wrapper">
+          {/* LEFT SECTION */}
+          <motion.div
+            className="left-section"
+            initial={{ x: -50, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            <motion.div
+              className="taglines-wrapper"
+              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
               <h1 className="tagline">
                 Cooking <br />
                 is better together
@@ -56,25 +68,53 @@ const LoginPage = () => {
                 <hr />
                 <p>Join the table</p>
               </div>
-            </div>
+            </motion.div>
 
-            <img className="poster" src={Poster} alt="Poster" />
+            <motion.img
+              className="poster"
+              src={Poster}
+              alt="Poster"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+            />
 
-            <div className="logo-name-registration">
+            <motion.div
+              className="logo-name-registration"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.6 }}
+            >
               <img src={Logo} alt="Logo" className="logo2" />
               <p className="website-name2">Let'em Cook</p>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           <hr className="partition" />
 
-          <div className="right-section">
-            <div className="title">
+          {/* RIGHT SECTION */}
+          <motion.div
+            className="right-section"
+            initial={{ x: 50, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            <motion.div
+              className="title"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
               <h1>Login</h1>
               <p>Please enter your login details below</p>
-            </div>
+            </motion.div>
 
-            <form onSubmit={handleSubmit}>
+            <motion.form
+              onSubmit={handleSubmit}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
               <div>
                 <label htmlFor="email">Email</label>
                 <input
@@ -95,18 +135,29 @@ const LoginPage = () => {
                 />
               </div>
 
-              <button className="sign-in-button" type="submit">
+              <motion.button
+                className="sign-in-button"
+                type="submit"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ duration: 0.15 }}
+              >
                 Sign In
-              </button>
-            </form>
+              </motion.button>
+            </motion.form>
 
-            <p className="link-to-login">
+            <motion.p
+              className="link-to-login"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+            >
               Don't have an account?
               <Link to="/register" style={{ textDecoration: "none" }}>
                 <span className="link">Register</span>
               </Link>
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
         </div>
       </div>
     </div>
