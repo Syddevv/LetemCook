@@ -1,5 +1,6 @@
 import Recipe from "../models/Recipe.js";
 import { cloudinary } from "../utils/cloudinary.js";
+import { updateCookingStreak } from "../utils/updateStreak.js";
 import User from "../models/User.js";
 import dotenv from "dotenv";
 dotenv.config();
@@ -45,6 +46,8 @@ export const addRecipe = async (req, res) => {
       $inc: { recipesSharedTotal: 1 },
       $push: { recipes: newRecipe._id },
     });
+
+    await updateCookingStreak(req.user._id);
 
     res.status(201).json({
       success: true,
@@ -244,6 +247,8 @@ export const toggleLikeRecipe = async (req, res) => {
       await User.findByIdAndUpdate(recipeOwnerId, {
         $inc: { totalLikes: 1 },
       });
+
+      await updateCookingStreak(userId);
 
       return res.json({ success: true, liked: true });
     }
