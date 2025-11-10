@@ -6,6 +6,8 @@ import "../styles/MyRecipes.css";
 import UserRecipeCard from "../components/UserRecipeCard";
 import NoRecipeIcon from "../assets/no-category-recipe.png";
 import { useAuth } from "../context/authContext";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 const MyRecipe = ({ collapsed, setCollapsed }) => {
   const navRef = useRef(null);
@@ -25,6 +27,7 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
   const [recipes, setRecipes] = useState([]);
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
+  const MySwal = withReactContent(Swal);
 
   // get user recipes
   useEffect(() => {
@@ -46,7 +49,7 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
     };
 
     fetchUserRecipes();
-  }, []);
+  }, [recipes]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -76,6 +79,17 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const result = await MySwal.fire({
+      title: "Share this recipe?",
+      text: "Once shared, it will be visible to others.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Yes, share it!",
+      cancelButtonText: "Cancel",
+      confirmButtonColor: "#28a745",
+      cancelButtonColor: "#d33",
+    });
+
     const data = new FormData();
     Object.keys(formData).forEach((key) => {
       if (key !== "image") data.append(key, formData[key]);
@@ -85,60 +99,76 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
       data.append("recipeImage", imageFile);
     }
 
-    try {
-      setLoading(true);
-      const token = localStorage.getItem("token");
-      await axios.post("http://localhost:5000/api/recipes", data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+    if (result.isConfirmed) {
+      try {
+        setLoading(true);
+        const token = localStorage.getItem("token");
+        await axios.post("http://localhost:5000/api/recipes", data, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-      window.location.reload();
-      alert("Recipe added successfully!");
-
-      setFormData({
-        title: "",
-        description: "",
-        ingredients: "",
-        instructions: "",
-        servings: "",
-        cookingTime: "",
-        recipeImage: null,
-        likes: "",
-        category: "",
-      });
-      setImageFile(null);
-      setImagePreview(null);
-    } catch (err) {
-      console.error("UPLOAD ERROR:", err);
-      alert("Failed to add recipe");
-    } finally {
-      setLoading(false);
+        MySwal.fire("Shared!", "Your recipe has been shared.", "success");
+        setFormData({
+          title: "",
+          description: "",
+          ingredients: "",
+          instructions: "",
+          servings: "",
+          cookingTime: "",
+          recipeImage: null,
+          likes: "",
+          category: "",
+        });
+        setImageFile(null);
+        setImagePreview(null);
+      } catch (err) {
+        console.error("UPLOAD ERROR:", err);
+        alert("Failed to add recipe");
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
   // handle deletion of recipe
   const deleteRecipe = async (id) => {
-    try {
-      const token = localStorage.getItem("token");
-      const res = await axios.delete(
-        `http://localhost:5000/api/recipes/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+    const result = await MySwal.fire({
+      title: "Are you sure?",
+      text: "This recipe will be permanently deleted!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+    });
 
-      if (res.data.success) {
-        setRecipes((prev) => prev.filter((recipe) => recipe._id !== id));
-        window.location.reload();
-        alert("Recipe deleted successfully");
+    if (result.isConfirmed) {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await axios.delete(
+          `http://localhost:5000/api/recipes/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (res.data.success) {
+          setRecipes((prev) => prev.filter((recipe) => recipe._id !== id));
+          MySwal.fire(
+            "Recipe Deleted!",
+            "Recipe is succesfully deleted.",
+            "success"
+          );
+        }
+      } catch (err) {
+        console.log("Failed to delete recipe", err.message);
       }
-    } catch (err) {
-      console.log("Failed to delete recipe", err.message);
     }
   };
 

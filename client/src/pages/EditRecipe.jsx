@@ -6,6 +6,8 @@ import EditIcon from "../assets/edit icon.png";
 import "../styles/EditRecipe.css";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 const EditRecipe = ({ collapsed, setCollapsed }) => {
   const navigate = useNavigate();
@@ -14,6 +16,7 @@ const EditRecipe = ({ collapsed, setCollapsed }) => {
   const [imagePreview, setImagePreview] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const fileInputRef = useRef();
+  const MySwal = withReactContent(Swal);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -48,33 +51,48 @@ const EditRecipe = ({ collapsed, setCollapsed }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const formDataToSend = new FormData();
-      formDataToSend.append("title", formData.title);
-      formDataToSend.append("servings", formData.servings);
-      formDataToSend.append("cookingTime", formData.cookingTime);
-      formDataToSend.append("description", formData.description);
-      formDataToSend.append("ingredients", formData.ingredients);
-      formDataToSend.append("instructions", formData.instructions);
-      formDataToSend.append("category", formData.category);
 
-      if (imageFile) {
-        formDataToSend.append("image", imageFile);
-      }
+    const result = await MySwal.fire({
+      title: "Edit this recipe?",
+      text: "Your changes will update the recipe and be visible to others.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Yes, edit it!",
+      cancelButtonText: "Cancel",
+      confirmButtonColor: "#28a745",
+      cancelButtonColor: "#d33",
+    });
 
-      await axios.put(
-        `http://localhost:5000/api/recipes/${id}`,
-        formDataToSend,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+    if (result.isConfirmed) {
+      try {
+        const formDataToSend = new FormData();
+        formDataToSend.append("title", formData.title);
+        formDataToSend.append("servings", formData.servings);
+        formDataToSend.append("cookingTime", formData.cookingTime);
+        formDataToSend.append("description", formData.description);
+        formDataToSend.append("ingredients", formData.ingredients);
+        formDataToSend.append("instructions", formData.instructions);
+        formDataToSend.append("category", formData.category);
+
+        if (imageFile) {
+          formDataToSend.append("image", imageFile);
         }
-      );
 
-      navigate("/my-recipes");
-    } catch (err) {
-      console.error("Error updating recipe:", err);
+        await axios.put(
+          `http://localhost:5000/api/recipes/${id}`,
+          formDataToSend,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        MySwal.fire("Edited!", "Your recipe has been edited.", "success");
+        navigate("/my-recipes");
+      } catch (err) {
+        console.error("Error updating recipe:", err);
+      }
     }
   };
 

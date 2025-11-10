@@ -12,6 +12,8 @@ import CollapseClose from "../assets/close-sidebar.png";
 import "../styles/Sidebar.css";
 import { useAuth } from "../context/authContext.js";
 import DefaultPic from "../assets/default profile.png";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 const navItems = [
   { label: "Discover Recipes", icon: DiscoverIcon, route: "/discover" },
@@ -26,10 +28,24 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout } = useAuth();
+  const MySwal = withReactContent(Swal);
 
   const handleLogout = () => {
-    logout();
-    navigate("/login");
+    MySwal.fire({
+      title: "Are you sure you want to logout?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Yes, logout",
+      cancelButtonText: "Cancel",
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        logout();
+        navigate("/login");
+        MySwal.fire("Logged out!", "You have been logged out.", "success");
+      }
+    });
   };
 
   return (

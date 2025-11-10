@@ -8,9 +8,10 @@ import "../styles/Settings.css";
 import { useAuth } from "../context/authContext";
 import DefaultPic from "../assets/default profile.png";
 import axios from "axios";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 const Settings = ({ collapsed, setCollapsed }) => {
-  const fileInputRef = useRef();
   const { user } = useAuth();
   const [imagePreview, setImagePreview] = useState(null);
   const [imageFile, setImageFile] = useState(null);
@@ -26,6 +27,7 @@ const Settings = ({ collapsed, setCollapsed }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [loading, setLoading] = useState(false);
+  const MySwal = withReactContent(Swal);
 
   const handleAccountChanges = (e) => {
     e.preventDefault();
@@ -51,6 +53,17 @@ const Settings = ({ collapsed, setCollapsed }) => {
   const handleChangePassword = async (e) => {
     e.preventDefault();
 
+    const result = await MySwal.fire({
+      title: "Change your password?",
+      text: "Your password will be updated. Make sure you remember the new password.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, change it",
+      cancelButtonText: "Cancel",
+      confirmButtonColor: "#28a745",
+      cancelButtonColor: "#d33",
+    });
+
     if (!currentPassword || !newPassword || !confirmPassword) {
       setPasswordError("Please fill all fields.");
       return;
@@ -66,30 +79,47 @@ const Settings = ({ collapsed, setCollapsed }) => {
       return;
     }
 
-    try {
-      setLoading(true);
-      const token = localStorage.getItem("token");
-      await axios.put(
-        `http://localhost:5000/api/auth/${user._id}/password`,
-        { currentPassword, newPassword },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+    if (result.isConfirmed) {
+      try {
+        setLoading(true);
+        const token = localStorage.getItem("token");
+        await axios.put(
+          `http://localhost:5000/api/auth/${user._id}/password`,
+          { currentPassword, newPassword },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
-      alert("Password updated successfully");
-    } catch (err) {
-      setPasswordError(
-        err.response?.data?.message || err.message || "Password update failed"
-      );
-    } finally {
-      setLoading(false);
-      refreshPage();
+        MySwal.fire(
+          "Success!",
+          "Your password has been updated.",
+          "success"
+        ).then(() => {
+          refreshPage();
+        });
+      } catch (err) {
+        setPasswordError(
+          err.response?.data?.message || err.message || "Password update failed"
+        );
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const result = await MySwal.fire({
+      title: "Save changes to your profile?",
+      text: "Your updated information will be saved and applied to your account.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Yes, save changes",
+      cancelButtonText: "Cancel",
+      confirmButtonColor: "#28a745",
+      cancelButtonColor: "#d33",
+    });
     const data = new FormData();
 
     Object.keys(formData).forEach((key) => {
@@ -102,27 +132,32 @@ const Settings = ({ collapsed, setCollapsed }) => {
       data.append("profilePicture", imageFile);
     }
 
-    try {
-      const token = localStorage.getItem("token");
-      await axios.put(`http://localhost:5000/api/auth/${user._id}`, data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      alert("Profile updated successfully!");
-      refreshPage();
-      setImageFile(null);
-      setImagePreview(null);
-      setFormData({
-        username: "",
-        email: "",
-        cookingTitle: "",
-        userBio: "",
-        profilePicture: null,
-      });
-    } catch (err) {
-      console.error(err.message);
+    if (result.isConfirmed) {
+      try {
+        const token = localStorage.getItem("token");
+        await axios.put(`http://localhost:5000/api/auth/${user._id}`, data, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        MySwal.fire("Saved!", "Your profile has been updated.", "success").then(
+          () => {
+            refreshPage();
+          }
+        );
+        setImageFile(null);
+        setImagePreview(null);
+        setFormData({
+          username: "",
+          email: "",
+          cookingTitle: "",
+          userBio: "",
+          profilePicture: null,
+        });
+      } catch (err) {
+        console.error(err.message);
+      }
     }
   };
 
@@ -131,6 +166,10 @@ const Settings = ({ collapsed, setCollapsed }) => {
       window.location.reload();
     }, 1000);
   };
+
+  setTimeout(() => {
+    setPasswordError("");
+  }, 2000);
 
   useEffect(() => {
     if (user) {
