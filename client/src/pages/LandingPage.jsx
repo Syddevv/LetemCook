@@ -8,9 +8,27 @@ import Clock from "../assets/clock.png";
 import ServingIcon from "../assets/Serving Icon.png";
 import NavBar from "../components/NavBar";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const [featuredRecipes, setFeaturedRecipes] = useState([]);
+
+  useEffect(() => {
+    const fetchFeaturedRecipes = async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:5000/api/recipes/featured"
+        );
+        setFeaturedRecipes(res.data.recipes);
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+
+    fetchFeaturedRecipes();
+  }, []);
 
   return (
     <div>
@@ -94,95 +112,53 @@ const LandingPage = () => {
         </div>
 
         <div className="recipe-cards-wrapper">
-          <div className="recipe-card">
-            <div className="like-count">
-              <img src={Heart} alt="heart" />
-              <p>23</p>
-            </div>
-            <img src={Pasta} alt="Pasta" className="recipe-image" />
+          {featuredRecipes && featuredRecipes.length > 0 ? (
+            featuredRecipes.map((recipe) => (
+              <div className="recipe-card" key={recipe._id}>
+                <div className="like-count">
+                  <img src={Heart} alt="heart" />
+                  <p>{recipe.likes}</p>
+                </div>
 
-            <div className="recipe-details-wrapper">
-              <div className="recipe-content">
-                <h3 className="recipe-title">Classic Pasta Carbonara</h3>
-                <p className="recipe-owner">by Sarah Chen</p>
-                <p className="recipe-details">
-                  Fresh tomatoes, mozzarella, and basil on a crispy...
-                </p>
+                <img
+                  src={recipe.image}
+                  alt={recipe.title}
+                  className="recipe-image"
+                />
 
-                <div className="time-serving">
-                  <div className="cooking-time">
-                    <img src={Clock} alt="Clock" />
-                    <p>25 mins</p>
-                  </div>
+                <div className="recipe-details-wrapper">
+                  <div className="recipe-content">
+                    <h3 className="recipe-title">{recipe.title}</h3>
+                    <p className="recipe-owner">
+                      by
+                      <span style={{ fontWeight: "600" }}>
+                        {recipe.user?.username}
+                      </span>
+                    </p>
+                    <p className="recipe-details">
+                      {recipe.description?.length > 80
+                        ? recipe.description.slice(0, 55) + "..."
+                        : recipe.description}
+                    </p>
 
-                  <div className="serving-count">
-                    <img src={ServingIcon} alt="Serving" />
-                    <p>2 servings</p>
+                    <div className="time-serving">
+                      <div className="cooking-time">
+                        <img src={Clock} alt="Clock" />
+                        <p>{recipe.cookingTime}</p>
+                      </div>
+
+                      <div className="serving-count">
+                        <img src={ServingIcon} alt="Serving" />
+                        <p>{recipe.servings}</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-
-          <div className="recipe-card">
-            <div className="like-count">
-              <img src={Heart} alt="heart" />
-              <p>23</p>
-            </div>
-            <img src={Pasta} alt="Pasta" className="recipe-image" />
-
-            <div className="recipe-details-wrapper">
-              <div className="recipe-content">
-                <h3 className="recipe-title">Classic Pasta Carbonara</h3>
-                <p className="recipe-owner">by Sarah Chen</p>
-                <p className="recipe-details">
-                  Fresh tomatoes, mozzarella, and basil on a crispy...
-                </p>
-
-                <div className="time-serving">
-                  <div className="cooking-time">
-                    <img src={Clock} alt="Clock" />
-                    <p>25 mins</p>
-                  </div>
-
-                  <div className="serving-count">
-                    <img src={ServingIcon} alt="Serving" />
-                    <p>2 servings</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="recipe-card">
-            <div className="like-count">
-              <img src={Heart} alt="heart" />
-              <p>23</p>
-            </div>
-            <img src={Pasta} alt="Pasta" className="recipe-image" />
-
-            <div className="recipe-details-wrapper">
-              <div className="recipe-content">
-                <h3 className="recipe-title">Classic Pasta Carbonara</h3>
-                <p className="recipe-owner">by Sarah Chen</p>
-                <p className="recipe-details">
-                  Fresh tomatoes, mozzarella, and basil on a crispy...
-                </p>
-
-                <div className="time-serving">
-                  <div className="cooking-time">
-                    <img src={Clock} alt="Clock" />
-                    <p>25 mins</p>
-                  </div>
-
-                  <div className="serving-count">
-                    <img src={ServingIcon} alt="Serving" />
-                    <p>2 servings</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+            ))
+          ) : (
+            <p>There are no current featured recipes.</p>
+          )}
         </div>
       </div>
 

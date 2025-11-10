@@ -317,3 +317,25 @@ export const getMostLikedRecipe = async (req, res) => {
       .json({ success: false, message: "Error fetching most liked recipe" });
   }
 };
+
+// fetching featured recipe, sorted by most like
+export const getFeaturedRecipe = async (req, res) => {
+  try {
+    const recipes = await Recipe.find()
+      .sort({ likes: -1 })
+      .limit(3)
+      .populate("user", "username");
+
+    if (!recipes || recipes.length === 0) {
+      return res
+        .status(404)
+        .json({ success: false, message: "No featured recipes found" });
+    }
+
+    res.status(200).json({ success: true, recipes });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ sucess: false, message: "Error fetching featured recipes" });
+  }
+};

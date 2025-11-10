@@ -10,6 +10,7 @@ import {
   checkLikeStatus,
   getLikedRecipes,
   getMostLikedRecipe,
+  getFeaturedRecipe,
 } from "../controllers/recipeController.js";
 import { middleware } from "../middlewares/middleware.js";
 import multer from "multer";
@@ -27,4 +28,5 @@ router.put("/:id/like", middleware, toggleLikeRecipe);
 router.get("/:id/check-like", middleware, checkLikeStatus);
 router.get("/liked-recipes", middleware, getLikedRecipes);
 router.get("/most-liked", middleware, getMostLikedRecipe);
+router.get("/featured", getFeaturedRecipe);
 export default router;
