@@ -15,7 +15,7 @@ import axios from "axios";
 
 const Profile = ({ collapsed, setCollapsed }) => {
   const navRef = useRef(null);
-  const { user, refreshUserProfile } = useAuth();
+  const { user, refreshUserProfile, creationDate } = useAuth();
   const [mostLikedRecipe, setMostLikedRecipe] = useState(null);
 
   const fetchMostLikedRecipe = async () => {
@@ -131,7 +131,7 @@ const Profile = ({ collapsed, setCollapsed }) => {
                 </div>
 
                 <div className="profile-card">
-                  <h3>Today</h3>
+                  <h3>{creationDate}</h3>
                   <p>Member Since</p>
                   <img src={Calendar} alt="calendar-icon" className="icon" />
                 </div>

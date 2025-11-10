@@ -53,12 +53,24 @@ const ContextProvider = ({ children }) => {
     }
   };
 
+  const creationDate = user
+    ? new Date(user.createdAt).toLocaleDateString()
+    : "";
+
   useEffect(() => {
     refreshUserProfile();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, refreshUserProfile }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        login,
+        logout,
+        refreshUserProfile,
+        creationDate,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
