@@ -88,8 +88,11 @@ const EditRecipe = ({ collapsed, setCollapsed }) => {
           }
         );
 
-        MySwal.fire("Edited!", "Your recipe has been edited.", "success");
-        navigate("/my-recipes");
+        MySwal.fire("Edited!", "Your recipe has been edited.", "success").then(
+          () => {
+            navigate("/my-recipes");
+          }
+        );
       } catch (err) {
         console.error("Error updating recipe:", err);
       }
