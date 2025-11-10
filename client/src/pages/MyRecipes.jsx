@@ -24,6 +24,7 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
   });
   const [recipes, setRecipes] = useState([]);
   const { user } = useAuth();
+  const [loading, setLoading] = useState(false);
 
   // get user recipes
   useEffect(() => {
@@ -85,6 +86,7 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
     }
 
     try {
+      setLoading(true);
       const token = localStorage.getItem("token");
       await axios.post("http://localhost:5000/api/recipes", data, {
         headers: {
@@ -112,6 +114,8 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
     } catch (err) {
       console.error("UPLOAD ERROR:", err);
       alert("Failed to add recipe");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -320,7 +324,7 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
                     />
                   </div>
                   <button type="submit" className="share-recipe-btn">
-                    Share Recipe
+                    {loading ? "Uploading recipe..." : "Share Recipe"}
                   </button>
                 </div>
               </div>
