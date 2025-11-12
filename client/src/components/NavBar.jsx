@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Logo from "../assets/Logo.png";
+import "../styles/NavBar.css";
 
 const NavBar = () => {
   const navRef = useRef(null);
