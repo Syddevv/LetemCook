@@ -5,7 +5,8 @@ nav {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
+  right: 0;
+  width: 100%;
   z-index: 100;
   background-color: white;
   transition: background-color 0.3s, box-shadow 0.3s;
@@ -14,9 +15,175 @@ nav {
   border-bottom: 1px solid #cfcfcf;
 }
 
-/* Add a class for the transparent nav */
+/* Transparent on scroll */
 nav.transparent {
   background-color: rgba(255, 255, 255, 0.7);
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
   backdrop-filter: blur(8px);
+}
+
+/* Logo + Title */
+.logo-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.logo {
+  width: 30px;
+}
+
+.website-name {
+  font-weight: bold;
+  font-size: 20px;
+  background: linear-gradient(90deg, #f97450, #f8d492);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Desktop Buttons */
+.nav-buttons {
+  display: flex;
+  gap: 15px;
+  margin-right: 100px;
+}
+
+.signIn-BTN {
+  background-color: white;
+  padding: 7px 25px;
+  border: 1px solid #cfcfcf;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #515151;
+  transition: all 0.3s ease;
+}
+
+.signIn-BTN:hover {
+  background-color: #f5f5f5;
+  border-color: #b5b5b5;
+  color: #333;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.signIn-BTN:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.getStarted-BTN {
+  background: linear-gradient(90deg, #f97450, #f8d492);
+  border: none;
+  color: white;
+  font-weight: 600;
+  padding: 12px 30px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.getStarted-BTN:hover {
+  background: linear-gradient(90deg, #ffe0a7, #f97450);
+  transform: scale(1.05);
+}
+
+/* HAMBURGER + MOBILE MENU */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  margin-right: 2rem;
+}
+
+.hamburger span {
+  width: 25px;
+  height: 3px;
+  background: #333;
+  transition: 0.3s ease;
+}
+
+/* Turn into X */
+.hamburger.active span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* Hidden by default */
+.mobile-menu {
+  position: absolute;
+  top: 80px;
+  right: 25px;
+  background: white;
+  border: 1px solid #dcdcdc;
+  border-radius: 10px;
+  padding: 15px;
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  width: 150px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: fadeSlide 0.3s ease;
+}
+
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mobile-menu.show {
+  display: flex;
+}
+
+/* TABLET */
+@media (max-width: 1024px) {
+  .logo {
+    width: 27px;
+  }
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+  /* show burger menu */
+  .hamburger {
+    display: flex;
+  }
+
+  /* hide nav buttons */
+  .nav-buttons {
+    display: none;
+  }
+
+  nav {
+    padding: 12px 15px !important;
+  }
+
+  .logo-name img {
+    width: 30px;
+  }
+
+  .website-name {
+    font-size: 1.1rem;
+  }
+
+  .getStarted-BTN {
+    padding: 9px 30px;
+  }
 }

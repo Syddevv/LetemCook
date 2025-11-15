@@ -8,7 +8,7 @@ import Clock from "../assets/clock.png";
 import ServingIcon from "../assets/Serving Icon.png";
 import NavBar from "../components/NavBar";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useLayoutEffect } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 
