@@ -7,8 +7,8 @@ import LikeRecipesIcon from "../assets/Liked Recipes.png";
 import ProfileIcon from "../assets/Profile.png";
 import SettingsIcon from "../assets/Settings.png";
 import LogoutIcon from "../assets/logout.png";
-import CollapseOpen from "../assets/open-sidebar.png";
-import CollapseClose from "../assets/close-sidebar.png";
+import CollapseOpen from "../assets/open-mobile-sidebar-icon.png";
+import CollapseClose from "../assets/collapse-mobile-sidebar-icon.png";
 import "../styles/Sidebar.css";
 import { useAuth } from "../context/authContext.js";
 import DefaultPic from "../assets/default profile.png";
@@ -25,7 +25,13 @@ const navItems = [
   { label: "Settings", icon: SettingsIcon, route: "/settings" },
 ];
 
-const Sidebar = ({ collapsed, setCollapsed }) => {
+const Sidebar = ({
+  collapsed,
+  setCollapsed,
+  isMobile,
+  isMobileSidebarOpen,
+  toggleMobileSidebar,
+}) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout } = useAuth();
@@ -49,17 +55,37 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
     });
   };
 
-  return (
-    <aside className={`sidebar-wrapper${collapsed ? " collapsed" : ""}`}>
-      <button
-        className="collapse-btn"
-        onClick={() => setCollapsed((prev) => !prev)}
-        aria-label="Toggle sidebar"
-      >
-        {collapsed ? <img src={CollapseOpen} /> : <img src={CollapseClose} />}
-      </button>
+  const sidebarClasses = `sidebar-wrapper ${
+    isMobile ? "mobile" : collapsed ? "collapsed" : ""
+  } ${isMobile && isMobileSidebarOpen ? "mobile-open" : ""}`;
 
-      {!collapsed && (
+  return (
+    <aside className={sidebarClasses}>
+      {isMobile ? (
+        <div className="mobile-sidebar-header">
+          <button
+            className="mobile-close-btn"
+            onClick={toggleMobileSidebar}
+            aria-label="Close sidebar"
+          >
+            <img src={CollapseClose} alt="Close" />
+          </button>
+        </div>
+      ) : (
+        <button
+          className="collapse-btn"
+          onClick={() => setCollapsed((prev) => !prev)}
+          aria-label="Toggle sidebar"
+        >
+          {collapsed ? <img src={CollapseOpen} /> : <img src={CollapseClose} />}
+        </button>
+      )}
+
+      {/* --- 
+      FIXED LOGIC HERE: 
+      Show if: (NOT mobile AND NOT collapsed) OR (IS mobile)
+      --- */}
+      {((!isMobile && !collapsed) || isMobile) && (
         <div className="profile-wrapper">
           {user && (
             <img
@@ -103,7 +129,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
             whileTap={{ scale: 0.97 }}
           >
             <img src={item.icon} alt={item.label} />
-            {!collapsed && item.label}
+            {(!collapsed || isMobile) && item.label}
           </motion.li>
         ))}
 
@@ -123,7 +149,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
           whileTap={{ scale: 0.97 }}
         >
           <img src={LogoutIcon} alt="Logout" />
-          {!collapsed && "Logout"}
+          {(!collapsed || isMobile) && "Logout"}
         </motion.li>
       </motion.ul>
     </aside>
