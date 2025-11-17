@@ -8,12 +8,30 @@ import ServingIcon from "../assets/Serving Icon.png";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { motion } from "framer-motion";
+import CollapseOpen from "../assets/open-mobile-sidebar-icon.png";
 
 const RecipeDetails = ({ collapsed, setCollapsed }) => {
   const navRef = useRef(null);
   const navigate = useNavigate();
   const { id } = useParams();
   const [recipes, setRecipes] = useState([]);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 992);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+
+  const toggleMobileSidebar = () => setIsMobileSidebarOpen((prev) => !prev);
+
+  // handle screen resize
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 992);
+      if (window.innerWidth > 992) {
+        setIsMobileSidebarOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -56,14 +74,29 @@ const RecipeDetails = ({ collapsed, setCollapsed }) => {
     }),
   };
 
+  const headerVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  };
+
   return (
     <div className="page-wrapper">
-      <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
+      <Sidebar
+        collapsed={collapsed}
+        setCollapsed={setCollapsed}
+        isMobile={isMobile}
+        isMobileSidebarOpen={isMobileSidebarOpen}
+        toggleMobileSidebar={toggleMobileSidebar}
+      />
+
+      {isMobile && isMobileSidebarOpen && (
+        <div className="sidebar-overlay" onClick={toggleMobileSidebar}></div>
+      )}
 
       <div
         className="page-wrapper-content"
         style={{
-          marginLeft: collapsed ? "130px" : "400px",
+          marginLeft: isMobile ? "0" : collapsed ? "71px" : "341px",
           transition: "margin-left 0.3s",
         }}
       >
@@ -72,13 +105,21 @@ const RecipeDetails = ({ collapsed, setCollapsed }) => {
           ref={navRef}
           className="header"
           style={{
-            left: collapsed ? "70px" : "340px",
+            // --- Corrected left value ---
+            left: isMobile ? "0" : collapsed ? "71px" : "341px",
             right: 0,
             transition: "left 0.3s",
           }}
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0, transition: { duration: 0.5 } }}
+          variants={headerVariants}
+          initial="hidden"
+          animate="visible"
         >
+          {isMobile && (
+            <button className="mobile-menu-btn" onClick={toggleMobileSidebar}>
+              <img src={CollapseOpen} alt="Open Menu" />
+            </button>
+          )}
+
           <div className="logo-webName">
             <img src={Logo} alt="Logo" className="web-logo" />
             <p className="web-name">Let'em Cook</p>
