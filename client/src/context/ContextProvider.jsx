@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
 import { AuthContext } from "./authContext.js";
 
 const ContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+
+  // 1. Define the Base URL dynamically
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   const login = (user) => {
     setUser(user);
   };
@@ -12,7 +15,8 @@ const ContextProvider = ({ children }) => {
   useEffect(() => {
     const verifyUser = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/auth/verify", {
+        // 2. Use apiUrl instead of localhost
+        const res = await axios.get(`${apiUrl}/api/auth/verify`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -24,10 +28,12 @@ const ContextProvider = ({ children }) => {
         }
       } catch (error) {
         console.log(error);
+        // If verification fails (e.g. 401), ensure user is null
+        setUser(null);
       }
     };
     verifyUser();
-  }, []);
+  }, [apiUrl]); // Added dependency
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -38,7 +44,8 @@ const ContextProvider = ({ children }) => {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch("http://localhost:5000/api/auth/profile", {
+      // 3. Use apiUrl here as well
+      const res = await fetch(`${apiUrl}/api/auth/profile`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
