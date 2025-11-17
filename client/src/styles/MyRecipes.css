@@ -490,6 +490,12 @@
   .image-group {
     margin-top: 0;
   }
+
+  .recipes-header-2 {
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+  }
 }
 
 /* 1 columnn recipe for smaller screens */
