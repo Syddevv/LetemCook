@@ -10,7 +10,7 @@ const NavBar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const isAuthPage =
-    location.pathname === "/login" || location.pathname === "register";
+    location.pathname === "/login" || location.pathname === "/register";
 
   useEffect(() => {
     const handleScroll = () => {
