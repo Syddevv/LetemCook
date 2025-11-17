@@ -5,6 +5,12 @@
   margin-top: 70px;
 }
 
+.page-wrapper-content {
+  width: auto !important; /* Forces the div to fill ONLY available space, not 100% of screen */
+  max-width: 100%;
+  overflow-x: hidden; /* Prevents any accidental horizontal scrolling */
+}
+
 .add-new-recipe-card {
   background: #fff;
   border: 1px solid #ececec;
@@ -16,6 +22,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
 }
 
 .add-recipe-title {
@@ -402,4 +409,93 @@
   margin: 0;
   font-size: 14px;
   color: #9b9b9b;
+}
+
+.image-group {
+  margin-top: 32px;
+}
+
+@media screen and (max-width: 1200px) {
+  .add-recipe-form {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .left-inputs,
+  .right-inputs {
+    width: 100%;
+    flex: unset;
+  }
+
+  .category {
+    width: 100%;
+  }
+
+  .instructions-group textarea {
+    min-height: 180px;
+  }
+}
+
+/* BELOW 860px: CENTER & RESPONSIVE CARDS */
+
+@media screen and (max-width: 860px) {
+  .my-recipes {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    justify-content: center;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .recipe-box {
+    width: 100%;
+    max-width: 450px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Mobile View (Max-width: 768px) */
+@media screen and (max-width: 768px) {
+  .my-recipes-wrapper {
+    padding: 24px 16px;
+  }
+
+  .add-new-recipe-card {
+    padding: 20px 16px;
+  }
+
+  .input-row-1 {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .input-row-3 {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .input-group[style*="margin-top"] {
+    margin-top: 0 !important;
+  }
+
+  .my-recipes {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  .recipe-image-wrapper {
+    height: 180px;
+  }
+
+  .image-group {
+    margin-top: 0;
+  }
+}
+
+/* 1 columnn recipe for smaller screens */
+@media screen and (max-width: 550px) {
+  .my-recipes {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
 }
