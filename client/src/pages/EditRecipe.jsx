@@ -22,6 +22,7 @@ const EditRecipe = ({ collapsed, setCollapsed }) => {
   const MySwal = withReactContent(Swal);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 992);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const toggleMobileSidebar = () => setIsMobileSidebarOpen((prev) => !prev);
 
@@ -84,6 +85,7 @@ const EditRecipe = ({ collapsed, setCollapsed }) => {
     });
 
     if (result.isConfirmed) {
+      setIsLoading(true);
       try {
         const formDataToSend = new FormData();
         formDataToSend.append("title", formData.title);
@@ -115,6 +117,8 @@ const EditRecipe = ({ collapsed, setCollapsed }) => {
         );
       } catch (err) {
         console.error("Error updating recipe:", err);
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -361,7 +365,11 @@ const EditRecipe = ({ collapsed, setCollapsed }) => {
                     />
                   </div>
                   <button type="submit" className="share-recipe-btn">
-                    Update Recipe
+                    {isLoading ? (
+                      <div className="spinner"></div>
+                    ) : (
+                      "Update Recipe"
+                    )}
                   </button>
                 </div>
               </div>

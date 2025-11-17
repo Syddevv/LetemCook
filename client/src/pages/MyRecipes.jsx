@@ -428,7 +428,7 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
                     />
                   </div>
                   <button type="submit" className="share-recipe-btn">
-                    {loading ? "Uploading recipe..." : "Share Recipe"}
+                    {loading ? <div className="spinner"></div> : "Share Recipe"}
                   </button>
                 </div>
               </div>

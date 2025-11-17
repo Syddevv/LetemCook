@@ -12,11 +12,13 @@ import { motion } from "framer-motion";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const response = await axios.post(
@@ -38,6 +40,7 @@ const LoginPage = () => {
       } else {
         console.log(error.message);
       }
+      setLoading(false);
     }
   };
 
@@ -99,8 +102,6 @@ const LoginPage = () => {
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            {/* --- MOBILE HEADER (Only visible on mobile) --- */}
-
             <motion.div
               className="title"
               initial={{ y: 20, opacity: 0 }}
@@ -141,11 +142,13 @@ const LoginPage = () => {
               <motion.button
                 className="sign-in-button"
                 type="submit"
+                disabled={loading} // Disable button while loading
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 transition={{ duration: 0.15 }}
               >
-                Sign In
+                {/* 4. Conditionally render text or spinner */}
+                {loading ? <div className="spinner"></div> : "Sign In"}
               </motion.button>
             </motion.form>
 

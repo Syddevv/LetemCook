@@ -175,11 +175,12 @@ const RegistrationPage = () => {
               <motion.button
                 className="sign-up-button"
                 type="submit"
+                disabled={loading}
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 transition={{ duration: 0.15 }}
               >
-                {loading ? "Creating account..." : "Sign Up"}
+                {loading ? <div className="spinner"></div> : "Sign Up"}
               </motion.button>
             </motion.form>
 

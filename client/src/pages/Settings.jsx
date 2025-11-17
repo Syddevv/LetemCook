@@ -167,6 +167,7 @@ const Settings = ({ collapsed, setCollapsed }) => {
 
     if (result.isConfirmed) {
       try {
+        setLoading(true);
         const token = localStorage.getItem("token");
         await axios.put(
           `${import.meta.env.VITE_API_URL}/api/auth/${user._id}`,
@@ -194,6 +195,8 @@ const Settings = ({ collapsed, setCollapsed }) => {
         });
       } catch (err) {
         console.error(err.message);
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -394,7 +397,11 @@ const Settings = ({ collapsed, setCollapsed }) => {
                     </div>
 
                     <button className="save-changes-button" type="submit">
-                      Save Changes
+                      {loading ? (
+                        <div className="spinner"></div>
+                      ) : (
+                        "Save Changes"
+                      )}
                     </button>
                   </form>
                 </div>
@@ -461,7 +468,11 @@ const Settings = ({ collapsed, setCollapsed }) => {
                     className="save-password-button"
                     disabled={loading}
                   >
-                    {loading ? "Saving..." : "Save Password"}
+                    {loading ? (
+                      <div className="spinner"></div>
+                    ) : (
+                      "Save Password"
+                    )}
                   </button>
                 </form>
               </div>
