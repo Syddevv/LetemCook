@@ -117,7 +117,7 @@ const Settings = ({ collapsed, setCollapsed }) => {
         setLoading(true);
         const token = localStorage.getItem("token");
         await axios.put(
-          `http://localhost:5000/api/auth/${user._id}/password`,
+          `${import.meta.env.VITE_API_URL}/api/auth/${user._id}/password`,
           { currentPassword, newPassword },
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -168,12 +168,16 @@ const Settings = ({ collapsed, setCollapsed }) => {
     if (result.isConfirmed) {
       try {
         const token = localStorage.getItem("token");
-        await axios.put(`http://localhost:5000/api/auth/${user._id}`, data, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        await axios.put(
+          `${import.meta.env.VITE_API_URL}/api/auth/${user._id}`,
+          data,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         MySwal.fire("Saved!", "Your profile has been updated.", "success").then(
           () => {
             refreshPage();
