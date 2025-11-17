@@ -96,7 +96,7 @@ const CommunityRecipes = ({ collapsed, setCollapsed }) => {
         className="page-wrapper-content"
         style={{
           // --- Corrected margin-left ---
-          marginLeft: isMobile ? "0" : collapsed ? "71px" : "341px",
+          marginLeft: isMobile ? "0" : collapsed ? "71px" : "320px",
           transition: "margin-left 0.3s",
         }}
       >
@@ -106,7 +106,7 @@ const CommunityRecipes = ({ collapsed, setCollapsed }) => {
           className="header"
           style={{
             // --- Corrected left value ---
-            left: isMobile ? "0" : collapsed ? "71px" : "341px",
+            left: isMobile ? "0" : collapsed ? "71px" : "320px",
             right: 0,
             transition: "left 0.3s",
           }}
