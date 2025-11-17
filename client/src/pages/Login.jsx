@@ -47,7 +47,7 @@ const LoginPage = () => {
 
       <div className="login-page">
         <div className="login-wrapper">
-          {/* LEFT SECTION */}
+          {/* LEFT SECTION (Hidden on mobile via CSS) */}
           <motion.div
             className="left-section"
             initial={{ x: -50, opacity: 0 }}
@@ -99,6 +99,8 @@ const LoginPage = () => {
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
+            {/* --- MOBILE HEADER (Only visible on mobile) --- */}
+
             <motion.div
               className="title"
               initial={{ y: 20, opacity: 0 }}
@@ -114,6 +116,7 @@ const LoginPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
+              className="form-inputs-login"
             >
               <div>
                 <label htmlFor="email">Email</label>
