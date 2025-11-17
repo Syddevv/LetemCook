@@ -221,6 +221,7 @@ const Settings = ({ collapsed, setCollapsed }) => {
         <div className="settings-cards">
           <motion.div
             className="profile-header"
+            style={{ paddingLeft: "10px" }}
             variants={headerVariants}
             initial="hidden"
             animate="visible"
