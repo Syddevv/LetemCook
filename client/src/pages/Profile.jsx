@@ -12,11 +12,29 @@ import RecipeLogo from "../assets/recipe-book.png";
 import { useAuth } from "../context/authContext";
 import axios from "axios";
 import { motion } from "framer-motion";
+import CollapseOpen from "../assets/open-mobile-sidebar-icon.png";
 
 const Profile = ({ collapsed, setCollapsed }) => {
   const navRef = useRef(null);
   const { user, refreshUserProfile, creationDate } = useAuth();
   const [mostLikedRecipe, setMostLikedRecipe] = useState(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 992);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+
+  const toggleMobileSidebar = () => setIsMobileSidebarOpen((prev) => !prev);
+
+  // handle screen resize
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 992);
+      if (window.innerWidth > 992) {
+        setIsMobileSidebarOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const fetchMostLikedRecipe = async () => {
     try {
@@ -63,12 +81,22 @@ const Profile = ({ collapsed, setCollapsed }) => {
 
   return (
     <div className="page-wrapper">
-      <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
+      <Sidebar
+        collapsed={collapsed}
+        setCollapsed={setCollapsed}
+        isMobile={isMobile}
+        isMobileSidebarOpen={isMobileSidebarOpen}
+        toggleMobileSidebar={toggleMobileSidebar}
+      />
+
+      {isMobile && isMobileSidebarOpen && (
+        <div className="sidebar-overlay" onClick={toggleMobileSidebar}></div>
+      )}
 
       <div
         className="page-wrapper-content"
         style={{
-          marginLeft: collapsed ? "70px" : "340px",
+          marginLeft: isMobile ? "0" : collapsed ? "71px" : "341px",
           transition: "margin-left 0.3s",
         }}
       >
@@ -77,7 +105,8 @@ const Profile = ({ collapsed, setCollapsed }) => {
           ref={navRef}
           className="header"
           style={{
-            left: collapsed ? "70px" : "340px",
+            // --- Corrected left value ---
+            left: isMobile ? "0" : collapsed ? "71px" : "341px",
             right: 0,
             transition: "left 0.3s",
           }}
@@ -85,6 +114,12 @@ const Profile = ({ collapsed, setCollapsed }) => {
           initial="hidden"
           animate="visible"
         >
+          {isMobile && (
+            <button className="mobile-menu-btn" onClick={toggleMobileSidebar}>
+              <img src={CollapseOpen} alt="Open Menu" />
+            </button>
+          )}
+
           <div className="logo-webName">
             <img src={Logo} alt="Logo" className="web-logo" />
             <p className="web-name">Let'em Cook</p>
