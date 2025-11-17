@@ -1,59 +1,44 @@
 import User from "../models/User.js";
-import { formatInTimeZone } from "date-fns-tz";
 
-const TIME_ZONE = "Asia/Manila";
-
-const getDayStringInZone = (date) => {
-  return formatInTimeZone(date, TIME_ZONE, "yyyy-MM-dd");
-};
+// Helper to get YYYY-MM-DD in UTC
+const toDayString = (d) =>
+  new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()))
+    .toISOString()
+    .slice(0, 10);
 
 export async function updateCookingStreak(userId) {
   try {
     const user = await User.findById(userId);
     if (!user) return;
 
-    // Get the current moment in time
     const today = new Date();
-    // Get the string representation of "today" in your zone (e.g., "2025-11-18")
-    const todayStr = getDayStringInZone(today);
+    const todayStr = toDayString(today);
 
-    // Get the last activity date
     const last = user.lastActivityDate ? new Date(user.lastActivityDate) : null;
-    // Get the string representation of "last active day" in your zone
-    const lastStr = last ? getDayStringInZone(last) : null;
+    const lastStr = last ? toDayString(last) : null;
 
-    // If the last activity day is the same as this activity day, do nothing
-    if (lastStr === todayStr) {
-      console.log("Streak already updated for today.");
+    // --- THE FIX IS HERE ---
+    // Only stop if activity was today AND the streak is already started (> 0).
+    // If streak is 0, we assume this is the first real action, so we proceed.
+    if (lastStr === todayStr && user.cookingStreak > 0) {
       return;
     }
 
-    // Get "yesterday" in your timezone.
-    // We do this by getting "today" in the zone, then subtracting one day.
-    const todayInZone = new Date(
-      today.toLocaleString("en-US", { timeZone: TIME_ZONE })
-    );
-    const yesterdayInZone = new Date(todayInZone);
-    yesterdayInZone.setDate(yesterdayInZone.getDate() - 1);
-
-    const yesterdayStr = formatInTimeZone(
-      yesterdayInZone,
-      TIME_ZONE,
-      "yyyy-MM-dd"
-    );
+    const yesterday = new Date();
+    yesterday.setUTCDate(yesterday.getUTCDate() - 1);
+    const yesterdayStr = toDayString(yesterday);
 
     if (lastStr === yesterdayStr) {
-      // It was yesterday, so increment the streak
       user.cookingStreak = (user.cookingStreak || 0) + 1;
     } else {
-      // It was more than a day ago, reset to 1
+      // If it wasn't yesterday (or it's the very first time), set to 1
       user.cookingStreak = 1;
     }
 
-    // We still save the *actual* UTC timestamp of the activity
     user.lastActivityDate = today;
     await user.save();
+    console.log(`Streak updated for user ${userId}: ${user.cookingStreak}`);
   } catch (error) {
-    console.error("Error updating cooking streak:", error);
+    console.error("Error updating streak:", error);
   }
 }
