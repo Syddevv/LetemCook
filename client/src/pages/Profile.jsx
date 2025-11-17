@@ -56,6 +56,18 @@ const Profile = ({ collapsed, setCollapsed }) => {
   }, []);
 
   useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 30) {
+        navRef.current.classList.add("transparent");
+      } else {
+        navRef.current.classList.remove("transparent");
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
     refreshUserProfile();
   }, [refreshUserProfile]);
 
