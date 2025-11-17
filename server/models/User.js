@@ -50,7 +50,7 @@ const UserSchema = new mongoose.Schema(
     },
     lastActivityDate: {
       type: Date,
-      default: Date.now,
+      default: null,
     },
   },
   { timestamps: true }
