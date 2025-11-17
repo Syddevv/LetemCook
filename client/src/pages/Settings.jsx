@@ -11,9 +11,11 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { motion } from "framer-motion";
+import CollapseOpen from "../assets/open-mobile-sidebar-icon.png";
 
 const Settings = ({ collapsed, setCollapsed }) => {
   const { user } = useAuth();
+  const navRef = useRef(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const [formData, setFormData] = useState({
@@ -29,6 +31,36 @@ const Settings = ({ collapsed, setCollapsed }) => {
   const [passwordError, setPasswordError] = useState("");
   const [loading, setLoading] = useState(false);
   const MySwal = withReactContent(Swal);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 992);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+
+  const toggleMobileSidebar = () => setIsMobileSidebarOpen((prev) => !prev);
+
+  // handle screen resize
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 992);
+      if (window.innerWidth > 992) {
+        setIsMobileSidebarOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // transparent nav
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 30) {
+        navRef.current.classList.add("transparent");
+      } else {
+        navRef.current.classList.remove("transparent");
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleAccountChanges = (e) => {
     e.preventDefault();
@@ -191,20 +223,32 @@ const Settings = ({ collapsed, setCollapsed }) => {
 
   return (
     <div className="page-wrapper">
-      <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
+      <Sidebar
+        collapsed={collapsed}
+        setCollapsed={setCollapsed}
+        isMobile={isMobile}
+        isMobileSidebarOpen={isMobileSidebarOpen}
+        toggleMobileSidebar={toggleMobileSidebar}
+      />
+
+      {isMobile && isMobileSidebarOpen && (
+        <div className="sidebar-overlay" onClick={toggleMobileSidebar}></div>
+      )}
 
       <div
         className="page-wrapper-content"
         style={{
-          marginLeft: collapsed ? "70px" : "340px",
+          marginLeft: isMobile ? "0" : collapsed ? "71px" : "341px",
           transition: "margin-left 0.3s",
         }}
       >
         {/* HEADER */}
         <motion.div
+          ref={navRef}
           className="header"
           style={{
-            left: collapsed ? "70px" : "340px",
+            // --- Corrected left value ---
+            left: isMobile ? "0" : collapsed ? "71px" : "341px",
             right: 0,
             transition: "left 0.3s",
           }}
@@ -212,6 +256,12 @@ const Settings = ({ collapsed, setCollapsed }) => {
           initial="hidden"
           animate="visible"
         >
+          {isMobile && (
+            <button className="mobile-menu-btn" onClick={toggleMobileSidebar}>
+              <img src={CollapseOpen} alt="Open Menu" />
+            </button>
+          )}
+
           <div className="logo-webName">
             <img src={Logo} alt="Logo" className="web-logo" />
             <p className="web-name">Let'em Cook</p>
