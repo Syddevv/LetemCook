@@ -31,7 +31,7 @@ const LoginPage = () => {
       if (response.data.success) {
         login(response.data.user);
         localStorage.setItem("token", response.data.token);
-        navigate("/discover");
+        navigate("/community");
       }
     } catch (error) {
       if (error.response) {
