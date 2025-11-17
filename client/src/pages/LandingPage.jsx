@@ -20,7 +20,7 @@ const LandingPage = () => {
     const fetchFeaturedRecipes = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/recipes/featured"
+          `${import.meta.env.VITE_API_URL}/api/recipes/featured`
         );
         setFeaturedRecipes(res.data.recipes);
       } catch (err) {

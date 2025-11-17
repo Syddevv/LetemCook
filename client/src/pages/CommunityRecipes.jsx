@@ -33,7 +33,9 @@ const CommunityRecipes = ({ collapsed, setCollapsed }) => {
     const fetchRecipes = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/recipes?category=${selectedCategory}`
+          `${
+            import.meta.env.VITE_API_URL
+          }/api/recipes?category=${selectedCategory}`
         );
         setRecipes(res.data);
       } catch (err) {

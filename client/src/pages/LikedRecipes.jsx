@@ -47,7 +47,7 @@ const LikedRecipes = ({ collapsed, setCollapsed }) => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.get(
-        "http://localhost:5000/api/recipes/liked-recipes",
+        `${import.meta.env.VITE_API_URL}/api/recipes/liked-recipes`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

@@ -15,7 +15,7 @@ const RecipeCard = ({ recipe, onLikeUpdate }) => {
   const handleLike = async (recipeId) => {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/recipes/${recipeId}/like`,
+        `${import.meta.env.VITE_API_URL}/api/recipes/${recipeId}/like`,
         {
           method: "PUT",
           headers: {
@@ -44,7 +44,9 @@ const RecipeCard = ({ recipe, onLikeUpdate }) => {
         if (!token) return;
 
         const response = await fetch(
-          `http://localhost:5000/api/recipes/${recipe._id}/check-like`,
+          `${import.meta.env.VITE_API_URL}/api/recipes/${
+            recipe._id
+          }/check-like`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

@@ -40,7 +40,7 @@ const Profile = ({ collapsed, setCollapsed }) => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.get(
-        "http://localhost:5000/api/recipes/most-liked",
+        `${import.meta.env.VITE_API_URL}/api/recipes/most-liked`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

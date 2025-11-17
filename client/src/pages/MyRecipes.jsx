@@ -54,7 +54,7 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
       try {
         const token = localStorage.getItem("token");
         const res = await axios.get(
-          "http://localhost:5000/api/recipes/my-recipes",
+          `${import.meta.env.VITE_API_URL}/api/recipes/my-recipes`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -122,7 +122,7 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
       try {
         setLoading(true);
         const token = localStorage.getItem("token");
-        await axios.post("http://localhost:5000/api/recipes", data, {
+        await axios.post(`${import.meta.env.VITE_API_URL}/api/recipes`, data, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
@@ -169,7 +169,7 @@ const MyRecipe = ({ collapsed, setCollapsed }) => {
       try {
         const token = localStorage.getItem("token");
         const res = await axios.delete(
-          `http://localhost:5000/api/recipes/${id}`,
+          `${import.meta.env.VITE_API_URL}/api/recipes/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

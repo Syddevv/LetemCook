@@ -99,7 +99,7 @@ const EditRecipe = ({ collapsed, setCollapsed }) => {
         }
 
         await axios.put(
-          `http://localhost:5000/api/recipes/${id}`,
+          `${import.meta.env.VITE_API_URL}/api/recipes/${id}`,
           formDataToSend,
           {
             headers: {
@@ -129,7 +129,7 @@ const EditRecipe = ({ collapsed, setCollapsed }) => {
     try {
       const fetchRecipe = async () => {
         const res = await axios.get(
-          `http://localhost:5000/api/recipes/id/${id}`
+          `${import.meta.env.VITE_API_URL}/api/recipes/id/${id}`
         );
         setRecipe(res.data);
         setImagePreview(res.data.image);
