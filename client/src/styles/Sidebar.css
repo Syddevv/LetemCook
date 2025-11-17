@@ -151,48 +151,42 @@
   height: 24px;
 }
 
-/* --- Sidebar Breakpoint --- */
 @media (max-width: 992px) {
   .sidebar-wrapper.mobile {
-    /* Hide by default on mobile */
     transform: translateX(-100%);
-    width: 300px; /* A good mobile-menu width */
-    z-index: 102; /* Above overlay */
+    width: 300px;
+    z-index: 102;
     padding-top: 10px;
   }
 
   .sidebar-wrapper.mobile.mobile-open {
-    transform: translateX(0); /* Show sidebar */
+    transform: translateX(0);
   }
 
-  /* Hide desktop collapse button on mobile */
   .sidebar-wrapper.mobile .collapse-btn {
     display: none;
   }
 
-  /* Show mobile header/close button */
   .sidebar-wrapper.mobile .mobile-sidebar-header {
     display: flex;
   }
 
-  /* Ensure profile wrapper is hidden on mobile by default (to match image 2) */
-  /* Re-reading your code, you show it. Let's keep it, but adjust spacing */
   .sidebar-wrapper.mobile .profile-wrapper {
-    display: flex; /* Ensure it's visible */
+    display: flex;
     margin-bottom: 20px;
     padding-top: 0;
   }
 
   .sidebar-wrapper.mobile .navigations {
     margin-top: 0;
-    align-items: flex-start; /* Reset from collapsed desktop */
+    align-items: stretch;
     padding-left: 16px;
     padding-right: 16px;
   }
 
   .sidebar-wrapper.mobile .navigations li {
-    justify-content: flex-start; /* Reset from collapsed desktop */
+    justify-content: flex-start;
     padding: 8px 28px;
-    gap: 14px; /* Restore gap */
+    gap: 14px;
   }
 }
