@@ -160,7 +160,7 @@ nav.transparent {
 }
 
 /* MOBILE */
-@media (max-width: 600px) {
+@media (max-width: 1000px) {
   /* show burger menu */
   .hamburger {
     display: flex;
@@ -184,6 +184,6 @@ nav.transparent {
   }
 
   .getStarted-BTN {
-    padding: 9px 30px;
+    padding: 10px 20px;
   }
 }
