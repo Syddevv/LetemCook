@@ -121,7 +121,7 @@
 
 .features-wrapper {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   gap: 50px;
   flex-wrap: wrap;
@@ -132,7 +132,7 @@
   align-items: center;
   flex-direction: column;
   width: 250px;
-  height: 170px;
+  max-height: 300px;
   background-color: white;
   padding: 50px 35px;
   border: 1px solid #d7d7d7;
@@ -164,6 +164,7 @@
   font-size: 1.2rem;
   font-weight: 600;
   margin-bottom: 10px;
+  text-align: center;
 }
 
 .feature-subtitle {
@@ -367,6 +368,10 @@ footer p {
     flex-direction: column;
     text-align: center;
     padding: 120px 25px;
+  }
+
+  .feature-card {
+    min-height: 250px;
   }
 
   .hero-poster {
