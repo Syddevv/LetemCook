@@ -3,6 +3,7 @@
 * {
   font-family: Poppins;
   margin: 0;
+  box-sizing: border-box;
 }
 
 .registration-page {
@@ -12,6 +13,7 @@
   width: 100vw;
   align-items: center;
   justify-content: center;
+  padding: 20px;
 }
 
 .registration-wrapper {
@@ -20,13 +22,12 @@
   justify-content: center;
   background-color: white;
   padding: 50px 100px;
-  border-radius: 15px;
+  border-radius: 20px;
   gap: 25px;
-  box-shadow: 4px 8px 16px 0px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
   margin-top: 4%;
+  max-width: 100%;
 }
-
-/* LEFT SECTION */
 
 .left-section {
   display: flex;
@@ -65,8 +66,6 @@
   gap: 10px;
 }
 
-/* LOGO & WEBSITE NAME */
-
 .logo-name-registration {
   display: flex;
   align-items: center;
@@ -88,7 +87,9 @@
   color: transparent;
 }
 
-/* RIGHT SECTION */
+.right-section {
+  width: 350px;
+}
 
 .partition {
   width: 1px;
@@ -98,20 +99,26 @@
   margin: 0 40px;
 }
 
+.title {
+  margin-bottom: 25px;
+}
+
 .title h1 {
-  font-size: 3rem;
+  font-size: 2.2rem;
   font-weight: 600;
 }
 
 .title p {
-  color: #a8a8a8;
+  color: #777;
+  font-size: 0.95rem;
 }
 
 form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 10px;
   margin-top: 30px;
+  width: 100%;
 }
 
 form div {
@@ -120,34 +127,36 @@ form div {
   gap: 5px;
 }
 
-input {
-  padding: 10px 15px;
+.form-inputs input {
+  padding: 12px 15px;
   border-radius: 8px;
-  border: 1px solid #cccccc;
+  border: 1px solid #ddd;
+  font-size: 15px;
+  font-weight: 500;
+  background-color: #f5fcf5;
+}
+
+.form-inputs label {
   font-size: 15px;
   font-weight: 500;
 }
 
-label {
-  font-size: 15px;
-  font-weight: 400;
-}
-
 .sign-up-button {
-  background-color: #f97450;
+  background: linear-gradient(to right, #f97450, #ffae5c);
   border-radius: 8px;
   border: none;
   color: white;
   font-size: 1.1rem;
-  padding: 10px;
+  padding: 12px;
   font-weight: 500;
-  margin-top: 20px;
+  margin-top: 15px;
   cursor: pointer;
-  transition: 0.2s ease;
+  transition: all 0.2s ease;
+  width: 100%;
 }
 
 .sign-up-button:hover {
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 15px rgba(249, 116, 80, 0.3);
   transform: translateY(-2px);
 }
 
@@ -155,12 +164,15 @@ label {
   text-align: center;
   font-size: 14px;
   margin-top: 15px;
+  color: #555;
 }
 
 .link-to-login span {
   color: #f97450;
   cursor: pointer;
   transition: 0.3s ease;
+  font-weight: 500;
+  margin-left: 5px;
 }
 
 .link-to-login span:hover {
@@ -171,4 +183,33 @@ label {
   text-align: center;
   font-size: 12px;
   color: rgb(255, 65, 65);
+}
+
+@media (max-width: 992px) {
+  .left-section,
+  .partition {
+    display: none;
+  }
+
+  .registration-page {
+    align-items: flex-start;
+    padding-top: 12vh;
+  }
+
+  .registration-wrapper {
+    padding: 40px 25px;
+    width: 100%;
+    max-width: 450px;
+    margin-top: 0;
+    flex-direction: column;
+  }
+
+  .right-section .title h1,
+  .right-section .title p {
+    text-align: center;
+  }
+
+  .right-section {
+    width: 100%;
+  }
 }
