@@ -2,6 +2,7 @@
   flex: 1;
   overflow-y: auto;
   display: flex;
+  flex-wrap: wrap;
   gap: 20px;
   padding: 10px;
 }
@@ -36,7 +37,6 @@
 }
 
 .account-settings-card {
-  min-width: 450px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   padding: 25px 20px 40px 20px;
   border-radius: 8px;
@@ -110,6 +110,14 @@
 }
 
 /* UPDATE PASSSWORD CARD */
+
+.settings-grid-1 {
+  flex-basis: 450px;
+}
+
+.settings-grid-2 {
+  flex-basis: 300px;
+}
 
 .settings-grid-2 {
   display: flex;
@@ -228,4 +236,51 @@
   text-align: center;
   font-size: 12px;
   color: rgb(255, 65, 65);
+}
+
+/* =================================== */
+/*       RESPONSIVE STYLES         */
+/* =================================== */
+
+/* ----- Tablet Breakpoint ----- */
+/* Targets screens 992px wide and smaller (matches your isMobile state) */
+@media (max-width: 1300px) {
+  .settings-grids {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 992px) {
+  .settings-grids {
+    flex-direction: column;
+  }
+}
+
+/* ----- Mobile Breakpoint ----- */
+/* Targets screens 500px wide and smaller */
+@media (max-width: 500px) {
+  .settings-cards {
+    /* Reduce the main page padding on small screens */
+    padding: 24px 16px;
+  }
+
+  .account-settings-card {
+    /* Remove min-width to allow the card to shrink */
+    min-width: 0;
+    /* Reduce side padding */
+    padding: 25px 15px 30px 15px;
+  }
+
+  .account-settings-input {
+    /* Remove min-width to allow the form to shrink */
+    min-width: 0;
+    width: 100%; /* Ensure it fills the card */
+  }
+
+  .update-password-card,
+  .app-information-card {
+    /* Remove min-width and reduce side padding */
+    min-width: 0;
+    padding: 25px 20px;
+  }
 }
