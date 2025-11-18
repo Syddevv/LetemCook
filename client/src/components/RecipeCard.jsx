@@ -64,60 +64,54 @@ const RecipeCard = ({ recipe, onLikeUpdate }) => {
   }, [recipe._id]);
 
   return (
-    <div className="recipes">
-      <div className="recipe-box">
-        <div className="recipe-image-wrapper">
+    <div className="recipe-box">
+      <div className="recipe-image-wrapper">
+        <img src={recipe.image} alt={recipe.title} className="recipe-picture" />
+
+        <div className="recipe-like">
           <img
-            src={recipe.image}
-            alt={recipe.title}
-            className="recipe-picture"
+            src={liked ? Heart : LikeRecipe}
+            alt="Like"
+            className="like-icon"
+            onClick={() => handleLike(recipe._id)}
           />
-
-          <div className="recipe-like">
-            <img
-              src={liked ? Heart : LikeRecipe}
-              alt="Like"
-              className="like-icon"
-              onClick={() => handleLike(recipe._id)}
-            />
-            <span>{likes}</span>
-          </div>
+          <span>{likes}</span>
         </div>
+      </div>
 
-        <div className="recipe-content">
-          <h2 className="recipe-title">{recipe.title}</h2>
-          <p className="recipe-desc">
-            {recipe.description.length > 80
-              ? recipe.description.slice(0, 55) + "..."
-              : recipe.description}
-          </p>
+      <div className="recipe-content">
+        <h2 className="recipe-title">{recipe.title}</h2>
+        <p className="recipe-desc">
+          {recipe.description.length > 80
+            ? recipe.description.slice(0, 55) + "..."
+            : recipe.description}
+        </p>
 
-          <div className="recipe-info">
-            <span>
-              <img src={Clock} alt="Time" className="info-icon" />
-              {recipe.cookingTime} &nbsp; mins
-            </span>
-            <span>
-              <img src={ServingIcon} alt="Servings" className="info-icon" />
-              {recipe.servings} &nbsp; servings
-            </span>
-          </div>
-          <button
-            className="view-recipe-btn"
-            onClick={() => navigate(`/recipe-details/${recipe._id}`)}
-          >
-            <img
-              src={ViewRecipeIcon}
-              alt="view-recipe"
-              className="view-recipe-icon"
-            />
-            View Recipe
-          </button>
-
-          <p className="recipe-source">
-            by <strong>{recipe.user?.username}</strong>
-          </p>
+        <div className="recipe-info">
+          <span>
+            <img src={Clock} alt="Time" className="info-icon" />
+            {recipe.cookingTime} &nbsp; mins
+          </span>
+          <span>
+            <img src={ServingIcon} alt="Servings" className="info-icon" />
+            {recipe.servings} &nbsp; servings
+          </span>
         </div>
+        <button
+          className="view-recipe-btn"
+          onClick={() => navigate(`/recipe-details/${recipe._id}`)}
+        >
+          <img
+            src={ViewRecipeIcon}
+            alt="view-recipe"
+            className="view-recipe-icon"
+          />
+          View Recipe
+        </button>
+
+        <p className="recipe-source">
+          by <strong>{recipe.user?.username}</strong>
+        </p>
       </div>
     </div>
   );
