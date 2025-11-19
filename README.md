@@ -4,6 +4,8 @@
 
 Let'em Cook is a vibrant online platform designed for passionate home cooks to share their culinary masterpieces, discover new recipes, and connect with a community of food enthusiasts. Whether you're looking to create your next kitchen experiment or find inspiration for dinner tonight, Let'em Cook has everything you need to cook and share!
 
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Visit%20Site-FF5722?style=for-the-badge&logo=google-chrome&logoColor=white)](https://letem-cook.vercel.app/)
+
 ## ✨ Features
 
 Let'em Cook offers a rich set of features to enhance your cooking journey:
@@ -22,37 +24,12 @@ Let'em Cook offers a rich set of features to enhance your cooking journey:
     * **Cooking Streak:** Stay motivated with a cooking streak tracker, showing how many consecutive days you've shared or liked recipes.
 * **Intuitive Interface:** A clean and user-friendly design makes navigating the platform a breeze.
 
-## 🚀 Getting Started
+## 🛠️ Tech Stack
 
-To get a local copy up and running, follow these simple steps.
-
-### Prerequisites
-
-* Node.js (or similar backend environment if applicable)
-* npm or yarn
-* (Any specific database requirements, e.g., MongoDB, PostgreSQL)
-
-### Installation
-
-1.  Clone the repo
-    ```bash
-    git clone [https://github.com/your_username/letem-cook.git](https://github.com/your_username/letem-cook.git)
-    ```
-2.  Install NPM packages
-    ```bash
-    cd letem-cook
-    npm install
-    ```
-3.  Set up environment variables (if any, e.g., database connection strings, API keys)
-    ```
-    # Example .env file
-    DB_URI=your_database_connection_string
-    # ... other variables
-    ```
-4.  Run the application
-    ```bash
-    npm start
-    ```
+![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
+![Express.js](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
 
 ## 📸 Screenshots
 
