@@ -106,7 +106,6 @@
   padding: 30px 20px;
   align-items: center;
   border-radius: 10px;
-  max-height: 380px;
 }
 
 .most-liked-recipe-header {
@@ -138,7 +137,10 @@
 }
 
 .recipe-description img {
-  width: 250px;
+  width: 100%; /* Matches container width */
+  max-width: 250px; /* Keeps the original desktop look */
+  height: 200px; /* Forces a fixed height to prevent long images */
+  object-fit: cover; /* Crops the image nicely instead of stretching it */
   border-radius: 10px;
 }
 
