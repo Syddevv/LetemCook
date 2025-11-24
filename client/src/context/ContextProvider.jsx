@@ -4,8 +4,8 @@ import { AuthContext } from "./authContext.js";
 
 const ContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // 1. Define the Base URL dynamically
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const login = (user) => {
@@ -14,6 +14,7 @@ const ContextProvider = ({ children }) => {
 
   useEffect(() => {
     const verifyUser = async () => {
+      setLoading(true);
       try {
         // 2. Use apiUrl instead of localhost
         const res = await axios.get(`${apiUrl}/api/auth/verify`, {
@@ -30,6 +31,8 @@ const ContextProvider = ({ children }) => {
         console.log(error);
         // If verification fails (e.g. 401), ensure user is null
         setUser(null);
+      } finally {
+        setLoading(false);
       }
     };
     verifyUser();
