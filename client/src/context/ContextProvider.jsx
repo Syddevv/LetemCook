@@ -4,7 +4,7 @@ import { AuthContext } from "./authContext.js";
 
 const ContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!!localStorage.getItem("token"));
 
   const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -16,7 +16,6 @@ const ContextProvider = ({ children }) => {
     const verifyUser = async () => {
       setLoading(true);
       try {
-        // 2. Use apiUrl instead of localhost
         const res = await axios.get(`${apiUrl}/api/auth/verify`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -79,6 +78,7 @@ const ContextProvider = ({ children }) => {
         logout,
         refreshUserProfile,
         creationDate,
+        loading,
       }}
     >
       {children}
